@@ -1,0 +1,46 @@
+{% extends 'base.html' %}
+{% block contenido %}
+    <div class="title"><h2>Músicos Base</h2></div>
+    <div class="title">
+            <table>
+
+                <th>id</th>
+                <th>nombre</th>
+                <th>puesto</th>
+                <th>32 D {{ mes }}</th>
+                <th>Estado de cuenta {{ mes }}</th>
+                <th>Reporte de actividades</th>
+                
+        {% for k,v in musicos.items() %}
+                <tr>
+                    <td>{{ k }}</td>
+                    <td>{{ v['nombre'] }}</td>
+                    <td>{{ v['puesto']}}</td>
+            
+            {# Checar 32 D del usuario #} 
+            {% if k|string + mes +'32d.jpg' in archivos %}
+                    <td>  <a href="{{ url_for( 'static', filename= 'img'+ k|string + mes + '.jpg')}}">estadodecuenta.jpg</a></td>
+            {%else %}
+                    <td> No existe, <a href=""></a></td>
+            {% endif %}
+
+            {# Checar estado de cuenta del usuario #} 
+            {% if k|string + mes +'estadodecuenta.jpg' in archivos %}
+                    <td>  <a href="{{ url_for( 'static', filename= 'img'+ k|string + mes + '.jpg')}}">estadocuenta.jpg</a></td>
+            {%else %}
+                    <td>No hay archivo</td>
+            {% endif %}
+
+        {% endfor %}
+                </tr>
+            </table>
+    </div>
+    <div>
+        caca
+    </div>
+    <div class="title">
+        pedo
+    </div>
+
+
+    {% endblock %}

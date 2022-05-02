@@ -1,0 +1,6 @@
+body{ font-family: 'Courier New', Courier, monospace; font-size: 12px;
+background-color: #083a6381; margin: 0 5% 0 5%; }
+div{ border: 1px solid #c0c0df; padding: 2%; }
+.wrapp{ display: grid; grid-template-columns: repeat(4, auto); background-color: white;}
+.title{ grid-column: 1 / 5;}
+table, tr, td{ border: 1px solid gray; padding: 0.2em}
