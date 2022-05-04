@@ -1,4 +1,4 @@
-from flask import Flask, render_template
+from flask import Flask, render_template, request
 # from os.path import exists
 import os
 from datetime import datetime
@@ -14,9 +14,11 @@ mes_actual = meses[int(mes)-1]
 app = Flask(__name__)
 
 musicos = {
-    1 : {'nombre': 'Allen', 'puesto': 'director'},
-    2 : {'nombre': 'Poncho', 'puesto': 'cello'},
-    3 : {'nombre': 'Miguelin', 'puesto': 'violín'}
+    1 : {'nombre': 'Allen Gómez', 'puesto': 'director'},
+    2 : {'nombre': 'Poncho Gonzalez', 'puesto': 'cello'},
+    3 : {'nombre': 'Pedro Martinez', 'puesto': 'violín'},
+    4 : {'nombre': 'Jorge Aceves', 'puesto' : 'percusiones'},
+    5 : {'nombre': 'Ana Silvia Guerrero', 'puesto': 'piano'}
 }
 
 @app.route('/')
@@ -27,9 +29,12 @@ def index():
 
     return render_template('index.html', musicos = musicos , mes = mes_actual, archivos = dir_list)
 
-@app.route('/user/<intid>', methods=['GET', 'POST'])
-def method_name():
-    pass
+@app.route('/upload_docs', methods=['GET', 'POST'])
+def upload_docs():
+    idmusico    = request.args.get('idmusico') 
+    doctype     = request.args.get('doctype')
+    print(type(idmusico))
+    return render_template('upload_docs.html', musicos = musicos, idmusico = idmusico, mes = mes_actual, doctype = doctype)
 
 if __name__ == '__main__':
     app.run(host='127.0.0.1', port=8000, debug=True)

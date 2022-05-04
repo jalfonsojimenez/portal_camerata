@@ -1,6 +1,7 @@
 {% extends 'base.html' %}
 {% block contenido %}
-    <div class="title"><h2>Músicos Base</h2></div>
+    <div class="title"><h2> Sistema de alta de Documentos <br> <br>
+         Orquesta de Cámara de Zapopan</h2></div>
     <div class="title">
             <table>
 
@@ -18,17 +19,17 @@
                     <td>{{ v['puesto']}}</td>
             
             {# Checar 32 D del usuario #} 
-            {% if k|string + mes +'32d.jpg' in archivos %}
-                    <td>  <a href="{{ url_for( 'static', filename= 'img'+ k|string + mes + '.jpg')}}">estadodecuenta.jpg</a></td>
+            {% if k|string + mes +'32d.pdf' in archivos %}
+                    <td>  <a href="{{ url_for( 'static', filename= 'img/' + '32d'+ k|string + mes + '.pdf')}}">estadodecuenta.jpg</a></td>
             {%else %}
                     <td> No existe, <a href=""></a></td>
             {% endif %}
 
             {# Checar estado de cuenta del usuario #} 
-            {% if k|string + mes +'estadodecuenta.jpg' in archivos %}
-                    <td>  <a href="{{ url_for( 'static', filename= 'img'+ k|string + mes + '.jpg')}}">estadocuenta.jpg</a></td>
+            {% if k|string + 'ecuenta' + mes + '.pdf'  in archivos %}
+                    <td>  <a href="{{ url_for( 'static', filename=  'img/' + k|string + 'ecuenta' + mes + '.pdf')}}">estadocuenta.jpg</a></td>
             {%else %}
-                    <td>No hay archivo</td>
+                    <td> <span class="flag" > <i>No existe</i></span> <a href="{{ url_for( 'upload_docs', idmusico= k|string, doctype='estado_de_cuenta' )}}">subir archivo</a></td>
             {% endif %}
 
         {% endfor %}
@@ -36,10 +37,10 @@
             </table>
     </div>
     <div>
-        caca
     </div>
-    <div class="title">
-        pedo
+    <div>
+    </div>
+    <div>
     </div>
 
 

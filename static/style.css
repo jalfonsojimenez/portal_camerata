@@ -4,3 +4,4 @@ div{ border: 1px solid #c0c0df; padding: 2%; }
 .wrapp{ display: grid; grid-template-columns: repeat(4, auto); background-color: white;}
 .title{ grid-column: 1 / 5;}
 table, tr, td{ border: 1px solid gray; padding: 0.2em}
+.flag{ color: rgba(243, 35, 35, 0.678)}
