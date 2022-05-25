@@ -3,3 +3,4 @@ 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
 git push https://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@github.com/jalfonsojimenez/portal_camerata
 sintaxis:
 git push https://<GITHUB_ACCESS_TOKEN>@github.com/<GITHUB_USERNAME>/<REPOSITORY_NAME>.git
+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
