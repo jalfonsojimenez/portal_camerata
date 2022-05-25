@@ -1,7 +1,9 @@
 from flask import Flask, render_template, request
 # from os.path import exists
 import os
+import datetime
 from datetime import datetime
+import calendar
 
 # variables de tiempo
 mes = datetime.today().strftime('%m') 
@@ -21,6 +23,17 @@ musicos = {
     5 : {'nombre': 'Ana Silvia Guerrero', 'puesto': 'piano'}
 }
 
+#fechas
+dias_espanol  = ['domingo','lunes','martes','miércoles','jueves','viernes','sábado']
+today = datetime.now()
+mes = today.strftime('%m')
+anio = today.strftime('%Y')
+primerdiames = datetime(int(anio),int(mes),1)
+primerdiamessemana = primerdiames.strftime('%w')
+diasmes = calendar.monthrange(today.year, today.month)[1]
+
+
+
 @app.route('/')
 def index():
     # Checar el directorio de imágenes
@@ -35,6 +48,10 @@ def upload_docs():
     doctype     = request.args.get('doctype')
     print(type(idmusico))
     return render_template('upload_docs.html', musicos = musicos, idmusico = idmusico, mes = mes_actual, doctype = doctype)
+
+@app.route('/crea_calendario')
+def crea_calendario():
+    return render_template('crea_calendario.html', diasmes=diasmes , dias_espanol = dias_espanol, primerdiamessemana=primerdiamessemana)
 
 if __name__ == '__main__':
     app.run(host='127.0.0.1', port=8000, debug=True)

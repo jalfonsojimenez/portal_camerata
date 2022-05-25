@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+    <form action="calendario" method="post">
+{% block contenido %}
+    <div class="title"><h1>Calendario</h1></div>
+        {% for i in range( 0, diasmes + primerdiamessemana | int ) %}
+            {% if i < primerdiamessemana | int  %}
+            <div>
+                {{ i+1  }}
+                    {{ dias_espanol[i] }} <br> <br>    
+            </div>
+
+            {% else %}
+                <div>
+                    {{ i + 1 }}
+                    {{ dias_espanol[i] }} <br> <br>    
+                    <input type="text" name="{{ i- primerdiamessemana | int }}" size="1">
+                </div>
+            {% endif %}
+            
+        {% endfor %}
+
+    
+
+{% endblock %}
+    </form>
