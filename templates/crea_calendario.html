@@ -1,7 +1,16 @@
 {% extends 'base.html' %}
-    <form action="calendario" method="post">
 {% block contenido %}
-    <div class="title"><h1>Calendario</h1></div>
+    <form action="crea_calendario" method="POST">
+    <div class="title">
+        <h1>Calendario {{  mes_actual + ' ' + anio }}</h1>
+        <p>Espacio para crear el calendario de actividades con las siguientes siglas:</p>
+        <ul>
+            <li>x = Ensayo en CCC</li>
+            <li>y = Concierto de temporada</li>
+            <li>z = Estudio personal</li>
+            <li>Cualquier otra opcion solo escribirla</li>
+        </ul>
+    </div>
         {% for i in range( 0, diasmes + primerdiamessemana | int ) %}
             {% if i < primerdiamessemana | int  %}
             <div>
@@ -13,7 +22,7 @@
                 <div>
                     {{ i + 1 }}
                     {{ dias_espanol[i] }} <br> <br>    
-                    <input type="text" name="{{ i- primerdiamessemana | int }}" size="1">
+                    <input type="text" name="{{ i + 1 - primerdiamessemana | int }}" size="1">
                 </div>
             {% endif %}
             
@@ -21,5 +30,6 @@
 
     
 
-{% endblock %}
+        <input type="submit" value="hacer calendario">
     </form>
+{% endblock %}

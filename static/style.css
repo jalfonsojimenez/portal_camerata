@@ -5,4 +5,4 @@ div{ border: 1px solid #c0c0df; padding: 2%; }
 .title{ grid-column: 1 / 8;}
 table, tr, td{ border: 1px solid gray; padding: 0.2em}
 .flag{ color: rgba(243, 35, 35, 0.678)}
-form{ margin: 0; padding: 0;}
+form{ margin: 0; padding: 0; display: grid}
