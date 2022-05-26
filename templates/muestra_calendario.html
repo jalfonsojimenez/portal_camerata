@@ -1,0 +1,63 @@
+{% extends 'base.html' %}
+{% block contenido %}
+<div class="title">
+<p>
+    Lic. CRISTOPHER DE ALBA ANGUIANO  <br>
+    Director de Cultura Zapopan <br>
+    PRESENTE <br>
+    <br>
+    <br>
+    
+    {{ diasmes | string + ' de '  + mes_actual + ' de '  + anio }} <br><br>
+
+    Por este conducto me permito informar que al final del mes de {{ mes_actual }} del año {{ anio }}, he cumplido con las actividades laborales
+    correspondientes a {{ data | length }} servicios, comprendidos entre conciertos, ensayos presenciales y estudio personal, con el objetivo de
+    preparar los conciertos de temporada próximos a presentarse en el Centro Cultural Constitución y su transmisión en medios
+    digitales para alimentar la página de cultura
+    <br><br><br>
+
+
+    Sin más por el momento y adjuntando fotografías le agradezco y estoy a sus ordenes para cualquier comentario acerca del
+    mismo.
+    <br><br>
+    <br><br>
+    <br><br>
+
+    Atentamente
+    
+
+    <br><br>
+    <br><br>
+    <br><br>
+    {{ musicos[idmusico | int]['nombre'] }} <br><br>
+    {{ musicos[idmusico | int]['puesto'] }} <br><br>
+
+
+</p>
+</div>
+
+        {% for i in range( 0, diasmes + primerdiamessemana | int ) %}
+            {% if i < primerdiamessemana | int  %}
+            <div class='calendar'>
+                {{ i+1  }}
+                    {{ dias_espanol[i] }} <br> <br>    
+            </div>
+
+            {% else %}
+                <div class='calendar'>
+                    {{ i + 1 }}
+                    {{ dias_espanol[i] }} <br> <br>    
+                {% if data[i | string] == 'x' %}
+                    <p>Ensayo en ccc</p>
+                {% elif data[i | string] == 'y' %}
+                    <p>Concierto de temporada</p>
+                {% elif data[i | string] == 'z' %}
+                    <p>Estudio personal</p>
+                {% else %}
+                    <p> {{ data[i | string ]}}</p>
+                {% endif %} 
+                </div>
+            {% endif %}
+            
+        {% endfor %}
+{% endblock %}

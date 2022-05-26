@@ -22,8 +22,6 @@ primerdiames = datetime(int(anio),int(mes),1)
 primerdiamessemana = primerdiames.strftime('%w') #dia de la semana en que cae el primer dia del mes en numero
 diasmes = calendar.monthrange(today.year, today.month)[1]
 
-app = Flask(__name__)
-
 musicos = {
     1 : {'nombre': 'Allen Gómez', 'puesto': 'director'},
     2 : {'nombre': 'Poncho Gonzalez', 'puesto': 'cello'},
@@ -32,13 +30,26 @@ musicos = {
     5 : {'nombre': 'Ana Silvia Guerrero', 'puesto': 'piano'}
 }
 
+#APP y RUTAS
+app = Flask(__name__)
+
+
 @app.route('/')
 def index():
     # Checar el directorio de imágenes
     path = ('./static/img/')
     dir_list = os.listdir(path)
 
-    return render_template('index.html', musicos = musicos , mes = mes_actual, archivos = dir_list)
+    # Checar el directorio de 32d 
+    path1 = ('./static/files/32d')
+    dir_list1 = os.listdir(path1)
+
+    # Checar el directorio de estados de cuenta
+    path2 = ('./static/files/ecuenta')
+    dir_list2 = os.listdir(path2)
+
+    return render_template('index.html', musicos = musicos , mes = mes_actual, \
+                            archivosfotos = dir_list, archivos32 = dir_list1, archivosecuenta = dir_list2)
 
 @app.route('/upload_docs', methods=['GET', 'POST'])
 def upload_docs():
@@ -65,6 +76,20 @@ def crea_calendario():
     return render_template('crea_calendario.html', diasmes=diasmes , dias_espanol = dias_espanol, \
                             primerdiamessemana=primerdiamessemana, mes_actual=mes_actual, anio=anio)
 
+
+filename = os.path.join(app.static_folder, 'calendarios', 'calendario'+mes_actual+'.json')
+
+@app.route('/muestra_calendario/<idmusico>', methods=['GET'])
+def muestra_calendario(idmusico):
+    #idmusico    = request.args.get('idmusico', type= int) 
+    idmusico    =   idmusico 
+    print(idmusico)
+    with open(filename) as test_file:
+        data = json.load(test_file)
+
+    return render_template('muestra_calendario.html', idmusico=idmusico, data = data, diasmes=diasmes , dias_espanol = dias_espanol, \
+                            primerdiamessemana=primerdiamessemana, mes_actual=mes_actual, anio=anio, musicos = musicos)
+
 if __name__ == '__main__':
     app.run(host='127.0.0.1', port=8000, debug=True)
- 
+

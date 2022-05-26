@@ -9,8 +9,12 @@
                 <th>nombre</th>
                 <th>puesto</th>
                 <th>32 D {{ mes }}</th>
-                <th>Estado de cuenta {{ mes }}</th>
-                <th>Reporte de actividades</th>
+                <th>Estado <br> de cuenta </th>
+                <th>Reporte  <br> actividades</th>
+                <th>foto <br>1</th>
+                <th>foto <br>2</th>
+                <th>foto <br>3</th>
+                <th>foto <br>4</th>
                 
         {% for k,v in musicos.items() %}
                 <tr>
@@ -18,19 +22,46 @@
                     <td>{{ v['nombre'] }}</td>
                     <td>{{ v['puesto']}}</td>
             
-            {# Checar 32 D del usuario #} 
-            {% if k|string + mes +'32d.pdf' in archivos %}
-                    <td>  <a href="{{ url_for( 'static', filename= 'img/' + '32d'+ k|string + mes + '.pdf')}}">estadodecuenta.jpg</a></td>
+            {# Checar 32 D del usuario busca '1-32d-mayo.pdf'' en static/files/32d/) #} 
+            {% if  k|string + '-' +  '32d' + '-' + mes + '.pdf' in archivos32 %}
+                    <td>  <a href="{{ url_for( 'static', filename= 'files/32d/' + k|string + '-' + '32d' + '-' + mes + '.pdf') }}">32D</a></td>
             {%else %}
                     <td> No existe, <a href=""></a></td>
             {% endif %}
 
-            {# Checar estado de cuenta del usuario #} 
-            {% if k|string + 'ecuenta' + mes + '.pdf'  in archivos %}
-                    <td>  <a href="{{ url_for( 'static', filename=  'img/' + k|string + 'ecuenta' + mes + '.pdf')}}">estadocuenta.jpg</a></td>
+            {# Checar estado de cuenta  del usuario busca '1-ecuenta-mayo.pdf'' en static/files/ecuenta/) #} 
+            {% if k|string + '-' + 'ecuenta' + '-' + mes + '.pdf'  in archivosecuenta %}
+                    <td>  <a href="{{ url_for( 'static', filename=  'files/ecuenta/' + k|string + '-' + 'ecuenta' + '-' + mes + '.pdf') }}">e-cuenta</a></td>
             {%else %}
-                    <td> <span class="flag" > <i>No existe</i></span> <a href="{{ url_for( 'upload_docs', idmusico= k|string, doctype='estado_de_cuenta' )}}">subir archivo</a></td>
+                    <td> <a href="{{ url_for( 'upload_docs', idmusico= k|string, doctype='estado_de_cuenta' )}}">+</a></td>
             {% endif %}
+                    <td><a href="{{ url_for('muestra_calendario' , idmusico=k) }}">reporte</a></td>
+
+            {# Checar fotos del usuario '1-foto1-mayo.jpg' en static/img #}
+            {% if k|string + '-' + 'foto1' + '-' + mes + '.jpg' in archivosfotos %}
+                    <td><a href="{{ url_for('static', filename= 'img/' + k|string + '-' + 'foto1'+ '-' + mes + '.jpg' ) }}">foto1</a></td>
+            {% else %}
+                    <td>+</td>
+            {% endif %}
+
+            {% if k|string + '-' + 'foto2' + '-' + mes + '.jpg' in archivosfotos %}
+                    <td><a href="{{ url_for('static', filename= 'img/' + k|string + '-' + 'foto2'+ '-' + mes + '.jpg' ) }}">foto2</a></td>
+            {% else %}
+                    <td>+</td>
+            {% endif %}
+
+            {% if k|string + '-' + 'foto3' + '-' + mes + '.jpg' in archivosfotos %}
+                    <td><a href="{{ url_for('static', filename= 'img/' + k|string + '-' + 'foto3'+ '-' + mes + '.jpg' ) }}">foto3</a></td>
+            {% else %}
+                    <td>+</td>
+            {% endif %}
+
+            {% if k|string + '-' + 'foto4' + '-' + mes + '.jpg' in archivosfotos %}
+                    <td><a href="{{ url_for('static', filename= 'img/' + k|string + '-' + 'foto4'+ '-' + mes + '.jpg' ) }}">foto4</a></td>
+            {% else %}
+                    <td>+</td>
+            {% endif %}
+
 
         {% endfor %}
                 </tr>
