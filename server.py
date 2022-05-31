@@ -55,6 +55,10 @@ def index():
 def upload_docs():
     idmusico    = request.args.get('idmusico') 
     doctype     = request.args.get('doctype')
+    if doctype == 'ecuenta' or doctype == '32d':
+        nombrearchivo = idmusico + '-' + doctype + '-' + mes_actual +'.pdf' 
+        print( nombrearchivo )
+        print('sube el estado de cuenta')
     print(type(idmusico))
     return render_template('upload_docs.html', musicos = musicos, idmusico = idmusico, mes = mes_actual, doctype = doctype)
 
