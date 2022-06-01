@@ -40,27 +40,27 @@
 
             {# Checar fotos del usuario '1-foto1-mayo.jpg' en static/img #}
             {% if k|string + '-' + 'foto1' + '-' + mes + '.jpg' in archivosfotos %}
-                    <td><a href="{{ url_for('static', filename= 'img/' + k|string + '-' + 'foto1'+ '-' + mes + '.jpg' ) }}">foto1</a></td>
+                    <td><a href="{{ url_for('static', filename= 'files/fotos/' + k|string + '-' + 'foto1'+ '-' + mes + '.jpg' ) }}">foto1</a></td>
             {% else %}
-                    <td>+</td>
+                    <td><a href="{{ url_for('upload_docs', idmusico= k|string, doctype='fotos')}}">+</a></td>
             {% endif %}
 
             {% if k|string + '-' + 'foto2' + '-' + mes + '.jpg' in archivosfotos %}
-                    <td><a href="{{ url_for('static', filename= 'img/' + k|string + '-' + 'foto2'+ '-' + mes + '.jpg' ) }}">foto2</a></td>
+                    <td><a href="{{ url_for('static', filename= 'files/fotos/' + k|string + '-' + 'foto2'+ '-' + mes + '.jpg' ) }}">foto2</a></td>
             {% else %}
-                    <td>+</td>
+                    <td><a href="{{ url_for('upload_docs', idmusico= k|string, doctype='fotos')}}">+</a></td>
             {% endif %}
 
             {% if k|string + '-' + 'foto3' + '-' + mes + '.jpg' in archivosfotos %}
-                    <td><a href="{{ url_for('static', filename= 'img/' + k|string + '-' + 'foto3'+ '-' + mes + '.jpg' ) }}">foto3</a></td>
+                    <td><a href="{{ url_for('static', filename= 'files/fotos/' + k|string + '-' + 'foto3'+ '-' + mes + '.jpg' ) }}">foto3</a></td>
             {% else %}
-                    <td>+</td>
+                    <td><a href="{{ url_for('upload_docs', idmusico= k|string, doctype='fotos')}}">+</a></td>
             {% endif %}
 
             {% if k|string + '-' + 'foto4' + '-' + mes + '.jpg' in archivosfotos %}
-                    <td><a href="{{ url_for('static', filename= 'img/' + k|string + '-' + 'foto4'+ '-' + mes + '.jpg' ) }}">foto4</a></td>
+                    <td><a href="{{ url_for('static', filename= 'files/fotos/' + k|string + '-' + 'foto4'+ '-' + mes + '.jpg' ) }}">foto4</a></td>
             {% else %}
-                    <td>+</td>
+                    <td><a href="{{ url_for('upload_docs', idmusico= k|string, doctype='fotos')}}">+</a></td>
             {% endif %}
 
 

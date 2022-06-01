@@ -1,19 +1,23 @@
 from flask import Flask, flash, render_template, request, redirect, url_for
+from werkzeug.utils import secure_filename
 # from os.path import exists
 import os
 import json
 #import datetime
 from datetime import datetime
 import calendar
+from PIL import Image
+import pathlib
 
 # variables de tiempo
+#####################
+
 mes = datetime.today().strftime('%m') 
 meses = ['enero', 'febrero', 'marzo', 'abril', 'mayo', \
             'junio', 'julio', 'agosto', 'septiembre', 'octubre', \
             'noviembre', 'diciembre']
-# mes actual en español, lo checa en la lista -1 elementos, el array empieza en 0
-mes_actual = meses[int(mes)-1]
 
+mes_actual = meses[int(mes)-1] # mes actual en español, lo checa en la lista -1 elementos, el array empieza en 0
 dias_espanol  = ['domingo','lunes','martes','miércoles','jueves','viernes','sábado']
 today = datetime.now()
 mes = today.strftime('%m')
@@ -30,14 +34,31 @@ musicos = {
     5 : {'nombre': 'Ana Silvia Guerrero', 'puesto': 'piano'}
 }
 
-#APP y RUTAS
+#############
+#APP y RUTAS#
+#############
 app = Flask(__name__)
+app.secret_key = "secret key"
+app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024
+
+path = os.getcwd() # Get current path
+UPLOAD_FOLDER = os.path.join(path, 'static/files/') # file Upload
+
+# Make directory if uploads is not exists
+if not os.path.isdir(UPLOAD_FOLDER):
+    os.mkdir(UPLOAD_FOLDER)
+
+app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
+
+ALLOWED_EXTENSIONS = set([ 'pdf', 'jpg', 'jpeg']) # Allowed extension you can set your own
+def allowed_file(filename):
+    return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
 
 @app.route('/')
 def index():
     # Checar el directorio de imágenes
-    path = ('./static/img/')
+    path = ('./static/files/fotos')
     dir_list = os.listdir(path)
 
     # Checar el directorio de 32d 
@@ -48,18 +69,52 @@ def index():
     path2 = ('./static/files/ecuenta')
     dir_list2 = os.listdir(path2)
 
+
     return render_template('index.html', musicos = musicos , mes = mes_actual, \
                             archivosfotos = dir_list, archivos32 = dir_list1, archivosecuenta = dir_list2)
 
 @app.route('/upload_docs', methods=['GET', 'POST'])
 def upload_docs():
-    idmusico    = request.args.get('idmusico') 
-    doctype     = request.args.get('doctype')
-    if doctype == 'ecuenta' or doctype == '32d':
-        nombrearchivo = idmusico + '-' + doctype + '-' + mes_actual +'.pdf' 
-        print( nombrearchivo )
-        print('sube el estado de cuenta')
-    print(type(idmusico))
+    idmusico    = request.args.get( 'idmusico' ) 
+    doctype     = request.args.get( 'doctype' )
+    #nombrearchivo = idmusico + '-' + doctype + '-' + mes_actual +'.pdf' 
+    #filename = str(idmusico) + '-' + str(doctype)+ '-' + mes_actual +'.pdf' 
+
+    if request.method == 'POST':
+        if 'files[]' not in request.files:
+            flash( 'No hay archivos para subir' )
+            return redirect(request.url)
+
+        files = request.files.getlist( 'files[]' )
+        
+        for file in files:
+            idmusico    = request.form.get( 'idmusico' ) 
+            doctype     = request.form.get( 'doctype' )
+            if file and allowed_file( file.filename ):
+                filename = secure_filename( file.filename )
+                #filename = str(idmusico) + '-' + str(doctype)+ '-' + mes_actual +'.pdf' 
+                filename = str(idmusico) + '-' + str(doctype)+ '-' + mes_actual + '.' + filename[-3:]
+
+                if doctype == 'fotos': #Si son fotos hace un resize y cambio de extension
+                    filename = str(idmusico) + '-foto' + str(files.index(file)+1) + '-' + mes_actual + '.' + filename[-3:]
+                    file.save( os.path.join( app.config[ 'UPLOAD_FOLDER' ], doctype + '/' + filename ))
+                    image = Image.open('static/files/fotos/' + filename)
+                    dim     =   image.size #obtener tamaño de imagen
+                    rwidth  =   float(400) #ancho deseado de imagen
+                    width   =   float( dim[0] ) #obtener ancho
+                    height  =   float( rwidth/width ) * float(dim[1]) #hacer la proporcion del alto con el ancho deseado
+                    newsize =   ( int(rwidth), int(round(height)) ) #obtiene tamaño para resizear
+                    imagenr =   image.resize( newsize ) #resizea la imagen y la guarda como imagenr
+                    filenametosave = filename.split('.')[0] 
+                    imagenr.save( 'static/files/fotos/' + filenametosave + '.jpg' )
+
+                else: #Si son documentos los guarda solamente
+                    file.save( os.path.join( app.config[ 'UPLOAD_FOLDER' ], doctype + '/' + filename ))
+            
+        flash( 'Archivos subidos con éxito ')
+        return redirect( '/' )
+
+
     return render_template('upload_docs.html', musicos = musicos, idmusico = idmusico, mes = mes_actual, doctype = doctype)
 
 @app.route('/crea_calendario', methods=['GET','POST'])

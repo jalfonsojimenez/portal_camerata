@@ -1,9 +1,12 @@
 body{ font-family: 'Courier New', Courier, monospace; font-size: 12px;
 background-color: #083a6381; margin: 0 5% 0 5%; }
-div{  padding: 2%; }
+div{  padding: 3%; border:1px solid gray; background-color:white}
 .calendar{ border: 1px solid black; padding: 2%; }
 .wrapp{ display: grid; grid-template-columns: repeat(7, auto); background-color: white;}
 .title{ grid-column: 1 / 8;}
+.wrapp2{ display: grid; grid-template-columns: repeat(2, auto)}
 table, tr, td{ border: 1px solid gray; padding: 0.2em}
 th { padding-left: 0.4em; padding-right: 0.4em;}
 form{ margin: 0; padding: 0; display: grid}
+@media print{ .break{page-break-after: always;} }
+
