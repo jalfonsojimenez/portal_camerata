@@ -1,15 +1,20 @@
 {% extends 'base.html' %}
 {% block contenido %}
     <div class="title"><h2> Sistema de alta de Documentos <br> <br>
-         Orquesta de Cámara de Zapopan</h2></div>
+         Orquesta de Cámara de Zapopan </h2>
+         <h3>{{ mes }} de {{ anio }}</h3>
+    </div>
     <div class="title">
             <table>
 
                 <th>id</th>
                 <th>nombre</th>
                 <th>puesto</th>
-                <th>32 D {{ mes }}</th>
+                <th>Factura <br> {{ mes }}</th>
+                <th>32 D <br> {{ mes }}</th>
                 <th>Estado <br> de cuenta </th>
+                <th>Constancia <br> situacion <br>  fiscal</th>
+                <th>Carta <br> datos bancarios</th>
                 <th>Reporte  <br> actividades</th>
                 <th>foto <br>1</th>
                 <th>foto <br>2</th>
@@ -22,12 +27,21 @@
                     <td>{{ v['nombre'] }}</td>
                     <td>{{ v['puesto']}}</td>
             
+            {# Checar Factura  del usuario busca '1-factura-mayo.pdf'' en static/files/facturas/) #} 
+            {% if  k|string + '-' +  '32d' + '-' + mes + '.pdf' in archivosfactura %}
+                    <td>  <a href="{{ url_for( 'static', filename= 'files/facturas/' + k|string + '-' + 'factura' + '-' + mes + '.pdf') }}">32D</a></td>
+            {%else %}
+                    <td> <a href="{{ url_for( 'upload_docs', idmusico= k|string, doctype='factura' ) }}">+</a></td>
+            {% endif %}
+
+
             {# Checar 32 D del usuario busca '1-32d-mayo.pdf'' en static/files/32d/) #} 
             {% if  k|string + '-' +  '32d' + '-' + mes + '.pdf' in archivos32 %}
                     <td>  <a href="{{ url_for( 'static', filename= 'files/32d/' + k|string + '-' + '32d' + '-' + mes + '.pdf') }}">32D</a></td>
             {%else %}
                     <td> <a href="{{ url_for( 'upload_docs', idmusico= k|string, doctype='32d' ) }}">+</a></td>
             {% endif %}
+
 
             {# Checar estado de cuenta  del usuario busca '1-ecuenta-mayo.pdf'' en static/files/ecuenta/) #} 
             {% if k|string + '-' + 'ecuenta' + '-' + mes + '.pdf'  in archivosecuenta %}
@@ -36,7 +50,21 @@
                     <td> <a href="{{ url_for( 'upload_docs', idmusico= k|string, doctype='ecuenta' ) }}">+</a></td>
             {% endif %}
 
+
+            {# Checar constancia de situacion fiscal del usuario busca '1-sitfiscal-mayo.pdf'' en static/files/sitfiscal/) #} 
+            {% if k|string + '-' + 'sitfiscal' + '-' + mes + '.pdf'  in archivossitfiscal %}
+                    <td>  <a href="{{ url_for( 'static', filename=  'files/sitfiscal/' + k|string + '-' + 'sitfiscal' + '-' + mes + '.pdf') }}">sit-fiscal</a></td>
+            {%else %}
+                    <td> <a href="{{ url_for( 'upload_docs', idmusico= k|string, doctype='sitfiscal' ) }}">+</a></td>
+            {% endif %}
+
+            {# Columna con carta de datos bancarios#}
+                    <td><a href="{{ url_for('login' , idmusico=k) }}">cartadb</a></td>
+
+
+            {# Columna con reportes #}
                     <td><a href="{{ url_for('muestra_calendario' , idmusico=k) }}">reporte</a></td>
+
 
             {# Checar fotos del usuario '1-foto1-mayo.jpg' en static/img #}
             {% if k|string + '-' + 'foto1' + '-' + mes + '.jpg' in archivosfotos %}
@@ -67,12 +95,6 @@
         {% endfor %}
                 </tr>
             </table>
-    </div>
-    <div>
-    </div>
-    <div>
-    </div>
-    <div>
     </div>
 
 

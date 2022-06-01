@@ -1,0 +1,53 @@
+<div>
+    <h1>
+        MUESTRA DATOS BANCARIOS <br>
+
+        {{ musicos[ idmusico | int ]['nombre']}}
+    </h1>
+    {{ datos[ idmusico| string]['nombre'] }}
+        Zapopan, Jalisco, {{ diasmes }} de {{ mes_actual }} de {{ anio }}<br> <br>
+
+            <b>
+                ADRIANA ROMO LÓPEZ <br>
+                TESORERIA MUNICIPIO DE ZAPOPAN <br>
+                PRESENTE. <br>
+            </b>
+
+            <p> Yo , {{ datos[idmusico | string]['nombre']}}
+                en mi carácter de persona física con domicilio En
+                {{ datos[idmusico | string]['direccion']}} CP
+                {{ datos[idmusico | string]['cp']}} en el municipio de 
+                {{ datos[idmusico | string]['municipio']}} 
+                Y con Registro Federal de Contribuyente
+                {{ datos[idmusico | string]['rfc']}} 
+                <br><br>
+                <br><br>
+                <center>
+                    <b>
+                        Manifiesto bajo protesta de decir la verdad, conocimientos y aceptación.
+                    </b>
+                </center>
+                <br><br>
+                <br> <br>
+                Que por así convenir a nuestros intereses, confirmo los datos de cuenta bancaria para la recepción
+                de pagos, estando actualmente utilizándola, para que por favor me apoye con su registro y
+                canalizar los pagos a la misma:
+                <br><br>
+                <br> <br>
+                Banco: {{ datos[idmusico | string]['banco']}} <br>
+                sucursal: {{ datos[idmusico | string]['sucursal']}} <br>
+                Tipo de moneda: Moneda Nacional <br>
+                No. de Cuenta: {{ datos[idmusico | string]['numero_de_cuenta']}} <br>
+                Clabe Interbancaria: {{ datos[idmusico | string]['clabe']}} <br>
+                Número de Proveedor: {{ datos[idmusico | string]['proveedor']}} <br>
+
+            </p>
+            <br> <br>
+            <br> <br>
+            <p>Sin más por el momento, quedo a sus órdenes para cualquier asunto relacionado.</p>
+            <br> <br>
+            _________________________ <br> <br>
+
+
+</div>
+

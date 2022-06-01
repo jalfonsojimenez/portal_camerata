@@ -1,0 +1,122 @@
+{
+    "1" : {
+            "nombre" : "Allen Vladimir Gómez Ruíz",
+            "instrumento" : "Dirección",
+            "rfc" : "GORA750512UQ1",
+            "direccion" : "Juan Manuel 109 Colonia Centro Cp. 44100 ",
+            "cp" : "44100",
+            "municipio" : "Guadalajara, Jalisco, México",
+            "proveedor" : "06702",
+            "banco" : "Santander", 
+            "numero_de_cuenta" : " 60  5296 3434  9",
+            "sucursal" : "sucursal  1125 mod. tec guadalajara",
+            "clabe" : "014320605296343493"
+        }, 
+    "2" : {
+            "nombre" : "Jorge Eduardo Aceves Cisneros",
+            "instrumento" : "Percusiones",
+            "rfc" : "AECJ720804PR5",
+            "direccion" : "Calle José María Marroquí#3197 Colonia Jardines de La Paz Sector Reforma",
+            "cp" : "44860",
+            "municipio" : "Guadalajara, Jalisco, México",
+            "proveedor" : "07579",
+            "banco" : "Santander", 
+            "numero_de_cuenta" : "56-50626574-7",
+            "sucursal" : "Calzada",
+            "clabe" : "014320565062657479"
+        },
+
+    "Diana" : {
+            "nombre" : "Diana Carolina Laguna Rivas",
+            "instrumento" : "violin",
+            "rfc" : "LARD910510355",
+            "direccion" : "Circutio Misión del Bosque 285, colonia Misión del Bosque",
+            "cp" : "45133",
+            "municipio" : "Zapopan, Jalisco, México",
+            "proveedor" : "08608",
+            "banco" : "Banamex", 
+            "numero_de_cuenta" : "80552255198",
+            "sucursal" : "562 Plaza San Isidro ",
+            "clabe" : "002320902982914867"
+        } ,
+    "3" : {
+            "nombre" : "Yalissa Cruz Espino",
+            "instrumento" : "Violoncello",
+            "rfc" : "CUEY790318PV0",
+            "direccion" : "Av. Guadalajara #135 Col; Nuevo México",
+            "cp" : "",
+            "municipio" : "Zapopan, Jalisco, México",
+            "proveedor" : "08661",
+            "banco" : "Santander", 
+            "numero_de_cuenta" : "60-52788409-3",
+            "sucursal" : " 7795 SUC. TESISTAN",
+            "clabe" : "014320605278840930"
+        },
+    "4" : {
+            "nombre" : "Ana Silvia Guerrero González",
+            "instrumento" : "Piano",
+            "rfc" : "GUGA64111OIP1",
+            "direccion" : "Río Bec #1568 Col. Pinar de la Calma",
+            "cp" : "45080",
+            "municipio" : "Zapopan, Jalisco, México",
+            "proveedor" : "07300",
+            "banco" : "Santander", 
+            "numero_de_cuenta" : "60-61581519-3",
+            "sucursal" : "4683 Suc. Las Fuentes",
+            "clabe" : "014320606158151939"
+        } , 
+    "5" : {
+            "nombre" : "Sergio Rodríguez Barrón",
+            "instrumento" : "violin",
+            "rfc" : "ROBS7405097J3",
+            "direccion" : "Hacienda Santa Cruz del Valle. Numero. 1335 de la colonia Oblatos",
+            "cp" : "44700",
+            "municipio" : "Guadalajara, Jalisco, México",
+            "proveedor" : "08756",
+            "banco" : "Santander", 
+            "numero_de_cuenta" : "60527677847",
+            "sucursal" : "4818 SUC. Santa Mónica",
+            "clabe" : "014320605276778473"
+        } ,
+    "6" : {
+            "nombre" : "Francisco Vidal Rivera González ",
+            "instrumento" : "violin",
+            "rfc" : "RIGF921004SS6",
+            "direccion" : "circuito Parques del Centinela #634 en, colonia Parques del centinela",
+            "cp" : "45135",
+            "municipio" : "Zapopan, Jalisco, México",
+            "proveedor" : "08615",
+            "banco" : "Santander", 
+            "numero_de_cuenta" : "26-02402165-3",
+            "sucursal" : "Plaza San isidro ",
+            "clabe" : "014320260240216539"
+        } ,
+    "7" : {
+            "nombre" : "PARIS AYALA BUENROSTRO",
+            "instrumento" : "violin",
+            "rfc" : "AABP9112104C1",
+            "direccion" : "Epigmenio Preciado #2730 , colonia jardines seattle",
+            "cp" : "45150",
+            "municipio" : "Zapopan, Jalisco, México",
+            "proveedor" : "8702",
+            "banco" : "Santander", 
+            "numero_de_cuenta" : "60605668219",
+            "sucursal" : "4677",
+            "clabe" : "014320606056682199"
+        } ,
+    "8" : {
+            "nombre" : "Jorge Alfonso González Jiménez",
+            "instrumento" : "Violoncello",
+            "rfc" : "GOJJ800517IB4",
+            "direccion" : "Donceles 2347, Colonia Jardines del Country 2a sección",
+            "cp" : "44210",
+            "municipio" : "Guadalajara, Jalisco, México",
+            "proveedor" : "07381",
+            "banco" : "Santander", 
+            "numero_de_cuenta" : "26024021636",
+            "sucursal" : "7831, Mercado del Mar",
+            "clabe" : "014320260240216364"
+        } 
+
+
+}

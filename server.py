@@ -9,8 +9,9 @@ import calendar
 from PIL import Image
 import pathlib
 
-# variables de tiempo
-#####################
+#######################
+# variables de tiempo #
+#######################
 
 mes = datetime.today().strftime('%m') 
 meses = ['enero', 'febrero', 'marzo', 'abril', 'mayo', \
@@ -37,6 +38,7 @@ musicos = {
 #############
 #APP y RUTAS#
 #############
+
 app = Flask(__name__)
 app.secret_key = "secret key"
 app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024
@@ -50,28 +52,39 @@ if not os.path.isdir(UPLOAD_FOLDER):
 
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
-ALLOWED_EXTENSIONS = set([ 'pdf', 'jpg', 'jpeg']) # Allowed extension you can set your own
+ALLOWED_EXTENSIONS = set([ 'pdf', 'xml', 'jpg', 'jpeg']) # Allowed extension you can set your own
 def allowed_file(filename):
     return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
 
 @app.route('/')
 def index():
-    # Checar el directorio de imágenes
-    path = ('./static/files/fotos')
-    dir_list = os.listdir(path)
+
+    # Checar el directorio de facturas
+    path_factura    = ('./static/files/facturas')
+    dir_factura     = os.listdir(path_factura)
 
     # Checar el directorio de 32d 
-    path1 = ('./static/files/32d')
-    dir_list1 = os.listdir(path1)
+    path32d       = ('./static/files/32d')
+    dir_32d       = os.listdir(path32d)
 
     # Checar el directorio de estados de cuenta
-    path2 = ('./static/files/ecuenta')
-    dir_list2 = os.listdir(path2)
+    pathecuenta   = ('./static/files/ecuenta')
+    dir_ecuenta   = os.listdir(pathecuenta)
+
+    # Checar el directorio de situacion fiscal 
+    pathsitfiscal = ('./static/files/sitfiscal')
+    dir_sitfiscal = os.listdir(pathsitfiscal)
+
+    # Checar el directorio de imágenes
+    pathfotos = ('./static/files/fotos')
+    dir_fotos= os.listdir(pathfotos)
 
 
-    return render_template('index.html', musicos = musicos , mes = mes_actual, \
-                            archivosfotos = dir_list, archivos32 = dir_list1, archivosecuenta = dir_list2)
+    return render_template('index.html', musicos = musicos , mes = mes_actual, anio = anio, \
+                            archivosfactura = dir_factura, archivos32 = dir_32d, \
+                            archivosecuenta = dir_ecuenta, archivossitfiscal = dir_sitfiscal,\
+                            archivosfotos = dir_fotos)
 
 @app.route('/upload_docs', methods=['GET', 'POST'])
 def upload_docs():
@@ -148,6 +161,34 @@ def muestra_calendario(idmusico):
 
     return render_template('muestra_calendario.html', idmusico=idmusico, data = data, diasmes=diasmes , dias_espanol = dias_espanol, \
                             primerdiamessemana=primerdiamessemana, mes_actual=mes_actual, anio=anio, musicos = musicos)
+
+@app.route('/login/<idmusico>', methods=['GET', 'POST'])
+def login(idmusico):
+    idmusico = int( idmusico )
+    if idmusico in musicos: #checa si está en la lista para evitar hackeos
+        if request.method == 'POST':
+            password = request.form['password']
+            if password == '123':
+                filenamedba = os.path.join(app.static_folder, 'cartas_musicos', 'cartas_musicos.json')
+                with open(filenamedba) as f:
+                    datos = json.load(f)
+                return render_template('muestra_dba.html', idmusico = idmusico, musicos = musicos, \
+                                        datos = datos, filenamedba = filenamedba, diasmes=diasmes, mes_actual=mes_actual, anio = anio)
+                #return redirect('/muestra_dba')
+            else:
+                return redirect('/')
+    else:
+        return redirect('/')
+    return render_template( 'login.html', idmusico = idmusico, musicos = musicos, mes_actual = mes_actual)
+
+
+@app.route('/muestra_dba/', methods=['POST'])
+def muestra_dba(idmusico):
+    #idmusico    = request.args.get('idmusico', type= int) 
+
+    return render_template('muestra_calendario.html', idmusico=idmusico, datos = datos, diasmes=diasmes , dias_espanol = dias_espanol, \
+                            primerdiamessemana=primerdiamessemana, mes_actual=mes_actual, anio=anio, musicos = musicos)
+
 
 if __name__ == '__main__':
     app.run(host='127.0.0.1', port=8000, debug=True)
