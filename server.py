@@ -29,11 +29,13 @@ diasmes = calendar.monthrange(today.year, today.month)[1]
 
 musicos = {
     1 : {'nombre': 'Allen Gómez', 'puesto': 'director'},
-    2 : {'nombre': 'Poncho Gonzalez', 'puesto': 'cello'},
+    2 : {'nombre': 'Jorge Alfonso González Jiménez', 'puesto': 'cello'},
     3 : {'nombre': 'Pedro Martinez', 'puesto': 'violín'},
     4 : {'nombre': 'Jorge Aceves', 'puesto' : 'percusiones'},
-    5 : {'nombre': 'Ana Silvia Guerrero', 'puesto': 'piano'}
+    5 : {'nombre': 'Ana Silvia Guerrero', 'puesto': 'piano'},
+    6 : {'nombre': 'Montserrat', 'puesto': 'fagot'}
 }
+docs = ['32d', 'ecuenta', 'factura', 'dbancarios',  'sitfiscal', 'foto1','foto2','foto3','foto4']
 
 #############
 #APP y RUTAS#
@@ -56,42 +58,29 @@ ALLOWED_EXTENSIONS = set([ 'pdf', 'xml', 'jpg', 'jpeg']) # Allowed extension you
 def allowed_file(filename):
     return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
+###################
+###  FUNCIONES  ###
+###################
+def lee_archivos(docs):
+    pati        = []
+    archivos    = {}
+    for doc in docs:
+        pati.append('./static/files/' + doc)
+        archivos[doc] = os.listdir( './static/files/' + doc )
+    return archivos
 
 @app.route('/')
 def index():
 
-    # Checar el directorio de facturas
-    path_factura    = ('./static/files/facturas')
-    dir_factura     = os.listdir(path_factura)
-
-    # Checar el directorio de 32d 
-    path32d       = ('./static/files/32d')
-    dir_32d       = os.listdir(path32d)
-
-    # Checar el directorio de estados de cuenta
-    pathecuenta   = ('./static/files/ecuenta')
-    dir_ecuenta   = os.listdir(pathecuenta)
-
-    # Checar el directorio de situacion fiscal 
-    pathsitfiscal = ('./static/files/sitfiscal')
-    dir_sitfiscal = os.listdir(pathsitfiscal)
-
-    # Checar el directorio de imágenes
-    pathfotos = ('./static/files/fotos')
-    dir_fotos= os.listdir(pathfotos)
-
+    archivos = lee_archivos(docs)
 
     return render_template('index.html', musicos = musicos , mes = mes_actual, anio = anio, \
-                            archivosfactura = dir_factura, archivos32 = dir_32d, \
-                            archivosecuenta = dir_ecuenta, archivossitfiscal = dir_sitfiscal,\
-                            archivosfotos = dir_fotos)
+                            docs = docs, archivos = archivos)
 
 @app.route('/upload_docs', methods=['GET', 'POST'])
 def upload_docs():
     idmusico    = request.args.get( 'idmusico' ) 
     doctype     = request.args.get( 'doctype' )
-    #nombrearchivo = idmusico + '-' + doctype + '-' + mes_actual +'.pdf' 
-    #filename = str(idmusico) + '-' + str(doctype)+ '-' + mes_actual +'.pdf' 
 
     if request.method == 'POST':
         if 'files[]' not in request.files:
@@ -103,23 +92,29 @@ def upload_docs():
         for file in files:
             idmusico    = request.form.get( 'idmusico' ) 
             doctype     = request.form.get( 'doctype' )
+
             if file and allowed_file( file.filename ):
                 filename = secure_filename( file.filename )
-                #filename = str(idmusico) + '-' + str(doctype)+ '-' + mes_actual +'.pdf' 
                 filename = str(idmusico) + '-' + str(doctype)+ '-' + mes_actual + '.' + filename[-3:]
 
-                if doctype == 'fotos': #Si son fotos hace un resize y cambio de extension
+                if doctype[0:4] == 'foto': #Si son fotos hace un resize y cambio de extension
+
+                    # Nombres de archivo
                     filename = str(idmusico) + '-foto' + str(files.index(file)+1) + '-' + mes_actual + '.' + filename[-3:]
                     file.save( os.path.join( app.config[ 'UPLOAD_FOLDER' ], doctype + '/' + filename ))
-                    image = Image.open('static/files/fotos/' + filename)
+                    image = Image.open('static/files/' + doctype+ '/' + filename)
+
+                    # Manipulacion de imagenes, resizeo
                     dim     =   image.size #obtener tamaño de imagen
-                    rwidth  =   float(400) #ancho deseado de imagen
+                    rwidth  =   float(300) #ancho deseado de imagen
                     width   =   float( dim[0] ) #obtener ancho
                     height  =   float( rwidth/width ) * float(dim[1]) #hacer la proporcion del alto con el ancho deseado
                     newsize =   ( int(rwidth), int(round(height)) ) #obtiene tamaño para resizear
                     imagenr =   image.resize( newsize ) #resizea la imagen y la guarda como imagenr
+                    
+                    # guardar foto 
                     filenametosave = filename.split('.')[0] 
-                    imagenr.save( 'static/files/fotos/' + filenametosave + '.jpg' )
+                    imagenr.save( 'static/files/'+ 'foto' + str(files.index(file)+1) + '/' + filenametosave + '.jpg' )
 
                 else: #Si son documentos los guarda solamente
                     file.save( os.path.join( app.config[ 'UPLOAD_FOLDER' ], doctype + '/' + filename ))
@@ -182,12 +177,19 @@ def login(idmusico):
     return render_template( 'login.html', idmusico = idmusico, musicos = musicos, mes_actual = mes_actual)
 
 
-@app.route('/muestra_dba/', methods=['POST'])
+@app.route('/muestra_dba/', methods=['POST']) #Ruta para mostrar datos bancarios
 def muestra_dba(idmusico):
     #idmusico    = request.args.get('idmusico', type= int) 
 
     return render_template('muestra_calendario.html', idmusico=idmusico, datos = datos, diasmes=diasmes , dias_espanol = dias_espanol, \
                             primerdiamessemana=primerdiamessemana, mes_actual=mes_actual, anio=anio, musicos = musicos)
+
+@app.route('/usuario/<idmusico>', methods=['GET']) #Ruta para ver documentos por usuario
+def user(idmusico):
+    idmusico    = int(idmusico)
+    
+    archivos = lee_archivos( docs )
+    return render_template('usuario.html', idmusico = idmusico, musicos = musicos, docs = docs, mes = mes_actual,  archivos = archivos)
 
 
 if __name__ == '__main__':

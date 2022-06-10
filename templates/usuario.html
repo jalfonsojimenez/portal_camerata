@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+{% block contenido %}
+<div>
+    <h1>
+        Modificar o subir datos <br>
+        {{ musicos[idmusico]['nombre'] }}
+    </h1>
+    <h2>Archivos mes de {{ mes  }}</h2>
+    <table>
+    <th>Documento</th>
+    <th>Status</th>
+    {% for d in docs %}
+        {% set cadena = idmusico|string + '-' + d + '-' + mes %}
+        <tr>
+            <td>{{ d }}</td>
+            {% if cadena + '.pdf' in archivos[d] %}
+                    <td> <a href="{{ url_for('static', filename= 'files/'+ d + '/' + cadena + '.pdf') }}"> {{  cadena + '.pdf' }} </a> </td>
+            {% elif cadena + '.jpg' in archivos[d] %}
+                    <td> <a href="{{ url_for('static', filename= 'files/'+ d + '/' + cadena + '.jpg') }}"> {{  cadena + '.jpg' }} </a> </td>
+            {% else %}
+                    <td> no existe, <a href="{{ url_for('upload_docs', idmusico = idmusico|string, doctype = d) }}">subir archivo</a> </td>
+            {% endif %}
+        </tr>
+
+    {% endfor %}
+    </table>
+
+</div>
+{% endblock %}

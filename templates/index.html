@@ -5,96 +5,49 @@
          <h3>{{ mes }} de {{ anio }}</h3>
     </div>
     <div class="title">
-            <table>
-
+    
+    <table>
                 <th>id</th>
                 <th>nombre</th>
                 <th>puesto</th>
-                <th>Factura <br> {{ mes }}</th>
+
                 <th>32 D <br> {{ mes }}</th>
                 <th>Estado <br> de cuenta </th>
-                <th>Constancia <br> situacion <br>  fiscal</th>
+                <th>Factura <br> {{ mes }}</th>
                 <th>Carta <br> datos bancarios</th>
-                <th>Reporte  <br> actividades</th>
+                <th>Constancia <br> situacion <br>  fiscal</th>
+
                 <th>foto <br>1</th>
                 <th>foto <br>2</th>
                 <th>foto <br>3</th>
                 <th>foto <br>4</th>
-                
+
+                <th>Reporte  <br> actividades</th>
+        
+        <tr>
         {% for k,v in musicos.items() %}
-                <tr>
-                    <td>{{ k }}</td>
-                    <td>{{ v['nombre'] }}</td>
-                    <td>{{ v['puesto']}}</td>
+            <td>{{ k  }}</td>
+            <td><a href="{{ url_for('user', idmusico = k) }}">{{ v['nombre'] }}</a></td>
+            <td>{{ v['puesto']}}</td>
             
-            {# Checar Factura  del usuario busca '1-factura-mayo.pdf'' en static/files/facturas/) #} 
-            {% if  k|string + '-' +  '32d' + '-' + mes + '.pdf' in archivosfactura %}
-                    <td>  <a href="{{ url_for( 'static', filename= 'files/facturas/' + k|string + '-' + 'factura' + '-' + mes + '.pdf') }}">32D</a></td>
-            {%else %}
-                    <td> <a href="{{ url_for( 'upload_docs', idmusico= k|string, doctype='factura' ) }}">+</a></td>
-            {% endif %}
+            {% for d in docs%}
+            {% set cadena = k|string + '-' + d + '-' + mes %}
 
+                {% if cadena + '.pdf' in archivos[d] %}
+                    <td> <a href="{{ url_for('static', filename= 'files/'+ d + '/' + cadena + '.pdf') }}"> {{  cadena + '.pdf' }} </a> </td>
+                {% elif cadena + '.jpg' in archivos[d] %}
+                    <td> <a href="{{ url_for('static', filename= 'files/'+ d + '/' + cadena + '.jpg') }}"> {{  cadena + '.jpg' }} </a> </td>
+                {% else %}
+                    <td>  <a href="{{ url_for('upload_docs', idmusico = k|string, doctype = d) }}"> + </a> </td>
+                {% endif %}
 
-            {# Checar 32 D del usuario busca '1-32d-mayo.pdf'' en static/files/32d/) #} 
-            {% if  k|string + '-' +  '32d' + '-' + mes + '.pdf' in archivos32 %}
-                    <td>  <a href="{{ url_for( 'static', filename= 'files/32d/' + k|string + '-' + '32d' + '-' + mes + '.pdf') }}">32D</a></td>
-            {%else %}
-                    <td> <a href="{{ url_for( 'upload_docs', idmusico= k|string, doctype='32d' ) }}">+</a></td>
-            {% endif %}
-
-
-            {# Checar estado de cuenta  del usuario busca '1-ecuenta-mayo.pdf'' en static/files/ecuenta/) #} 
-            {% if k|string + '-' + 'ecuenta' + '-' + mes + '.pdf'  in archivosecuenta %}
-                    <td>  <a href="{{ url_for( 'static', filename=  'files/ecuenta/' + k|string + '-' + 'ecuenta' + '-' + mes + '.pdf') }}">e-cuenta</a></td>
-            {%else %}
-                    <td> <a href="{{ url_for( 'upload_docs', idmusico= k|string, doctype='ecuenta' ) }}">+</a></td>
-            {% endif %}
-
-
-            {# Checar constancia de situacion fiscal del usuario busca '1-sitfiscal-mayo.pdf'' en static/files/sitfiscal/) #} 
-            {% if k|string + '-' + 'sitfiscal' + '-' + mes + '.pdf'  in archivossitfiscal %}
-                    <td>  <a href="{{ url_for( 'static', filename=  'files/sitfiscal/' + k|string + '-' + 'sitfiscal' + '-' + mes + '.pdf') }}">sit-fiscal</a></td>
-            {%else %}
-                    <td> <a href="{{ url_for( 'upload_docs', idmusico= k|string, doctype='sitfiscal' ) }}">+</a></td>
-            {% endif %}
-
-            {# Columna con carta de datos bancarios#}
-                    <td><a href="{{ url_for('login' , idmusico=k) }}">cartadb</a></td>
-
-
+            {% endfor %}
             {# Columna con reportes #}
                     <td><a href="{{ url_for('muestra_calendario' , idmusico=k) }}">reporte</a></td>
-
-
-            {# Checar fotos del usuario '1-foto1-mayo.jpg' en static/img #}
-            {% if k|string + '-' + 'foto1' + '-' + mes + '.jpg' in archivosfotos %}
-                    <td><a href="{{ url_for('static', filename= 'files/fotos/' + k|string + '-' + 'foto1'+ '-' + mes + '.jpg' ) }}">foto1</a></td>
-            {% else %}
-                    <td><a href="{{ url_for('upload_docs', idmusico= k|string, doctype='fotos')}}">+</a></td>
-            {% endif %}
-
-            {% if k|string + '-' + 'foto2' + '-' + mes + '.jpg' in archivosfotos %}
-                    <td><a href="{{ url_for('static', filename= 'files/fotos/' + k|string + '-' + 'foto2'+ '-' + mes + '.jpg' ) }}">foto2</a></td>
-            {% else %}
-                    <td><a href="{{ url_for('upload_docs', idmusico= k|string, doctype='fotos')}}">+</a></td>
-            {% endif %}
-
-            {% if k|string + '-' + 'foto3' + '-' + mes + '.jpg' in archivosfotos %}
-                    <td><a href="{{ url_for('static', filename= 'files/fotos/' + k|string + '-' + 'foto3'+ '-' + mes + '.jpg' ) }}">foto3</a></td>
-            {% else %}
-                    <td><a href="{{ url_for('upload_docs', idmusico= k|string, doctype='fotos')}}">+</a></td>
-            {% endif %}
-
-            {% if k|string + '-' + 'foto4' + '-' + mes + '.jpg' in archivosfotos %}
-                    <td><a href="{{ url_for('static', filename= 'files/fotos/' + k|string + '-' + 'foto4'+ '-' + mes + '.jpg' ) }}">foto4</a></td>
-            {% else %}
-                    <td><a href="{{ url_for('upload_docs', idmusico= k|string, doctype='fotos')}}">+</a></td>
-            {% endif %}
-
+            </tr>
 
         {% endfor %}
-                </tr>
-            </table>
+    </table>
     </div>
 
 

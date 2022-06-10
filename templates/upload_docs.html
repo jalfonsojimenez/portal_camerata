@@ -6,7 +6,8 @@
     <h1>Dar de alta
     {% if doctype == 'ecuenta' %}
         Estado de Cuenta
-    {% elif doctype == 'fotos' %}
+    {% elif doctype[0:4] == 'foto' %}
+
         Fotos </h1> <br>
 
         <h3>Selecciona EN GRUPO todas las fotos que vayas a subir </h3>
@@ -17,7 +18,8 @@
 
     {% endif %}
 
-    <br> <h2> {{ musicos[idmusico|int]['nombre'] }}</h2> 
+    <br> <h2> {{ musicos[idmusico|int]['nombre'] }} </h2> 
+
 
         
     <h2>Mes de {{ mes }}</h2>

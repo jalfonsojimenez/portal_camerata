@@ -14,13 +14,12 @@
         {% for i in range( 0, diasmes + primerdiamessemana | int ) %}
             {% if i < primerdiamessemana | int  %}
             <div class="calendar">
-                {{ i+1  }}
                     {{ dias_espanol[i] }} <br> <br>    
             </div>
 
             {% else %}
                 <div class="calendar">
-                    {{ i + 1 }}
+                    {{ i + 1 -primerdiamessemana | int }}
                     {{ dias_espanol[i] }} <br> <br>    
                     <input type="text" name="{{ i + 1 - primerdiamessemana | int }}" size="1">
                 </div>
