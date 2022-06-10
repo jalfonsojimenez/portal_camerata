@@ -14,7 +14,6 @@
                 <th>32 D <br> {{ mes }}</th>
                 <th>Estado <br> de cuenta </th>
                 <th>Factura <br> {{ mes }}</th>
-                <th>Carta <br> datos bancarios</th>
                 <th>Constancia <br> situacion <br>  fiscal</th>
 
                 <th>foto <br>1</th>
@@ -23,6 +22,7 @@
                 <th>foto <br>4</th>
 
                 <th>Reporte  <br> actividades</th>
+                <th>Carta <br> datos bancarios</th>
         
         <tr>
         {% for k,v in musicos.items() %}
@@ -44,6 +44,8 @@
             {% endfor %}
             {# Columna con reportes #}
                     <td><a href="{{ url_for('muestra_calendario' , idmusico=k) }}">reporte</a></td>
+            {# Columna con estados de cuenta#}
+                    <td><a href="{{ url_for('login' , idmusico=k) }}">cartas <br> bancarias </a></td>
             </tr>
 
         {% endfor %}

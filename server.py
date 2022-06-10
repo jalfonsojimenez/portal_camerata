@@ -28,14 +28,26 @@ primerdiamessemana = primerdiames.strftime('%w') #dia de la semana en que cae el
 diasmes = calendar.monthrange(today.year, today.month)[1]
 
 musicos = {
-    1 : {'nombre': 'Allen Gómez', 'puesto': 'director'},
-    2 : {'nombre': 'Jorge Alfonso González Jiménez', 'puesto': 'cello'},
-    3 : {'nombre': 'Pedro Martinez', 'puesto': 'violín'},
-    4 : {'nombre': 'Jorge Aceves', 'puesto' : 'percusiones'},
-    5 : {'nombre': 'Ana Silvia Guerrero', 'puesto': 'piano'},
-    6 : {'nombre': 'Montserrat', 'puesto': 'fagot'}
+    1:  { 'nombre': 'Allen Vladimir Gómez', 'puesto' : 'dirección'},
+    2:  { 'nombre':'Roberto Carlos Hernández Estrada' , 'puesto': 'bibliotecario y administrativo' },
+    3:  { 'nombre': 'Diana Carolina Laguna Rivas' , 'puesto' : 'violín' },
+    4:  { 'nombre': 'Francisco Vidal Rivera González' , 'puesto': 'violín' },
+    5:  { 'nombre': 'Paris Ayala Buenrostro' , 'puesto' : 'violín' },
+    6:  { 'nombre': 'Ramón Lemus Bravo' , 'puesto' : 'violín' },
+    7:  { 'nombre': 'Sergio Rodríguez Barrón' , 'puesto': 'violín' },
+    8:  { 'nombre': 'Robert Carl Nelson' , 'puesto': 'viola' },
+    9:  { 'nombre': 'René Eduardo Nuño Guzmán' , 'puesto': 'viola' },
+    10: { 'nombre': 'Deni González Miniashkin' , 'puesto': 'contrabajo' },
+    11: { 'nombre': 'Jorge Alfonso González Jiménez' , 'puesto': 'violoncello' },
+    12: { 'nombre': 'Yalissa Cruz Espino' , 'puesto': 'violoncello' },
+    13: { 'nombre': 'Alfonso Chen Arellano' , 'puesto': 'clarinete' },
+    14: { 'nombre': 'David Alejandro Padilla Guerrero' , 'puesto': 'oboe' } ,
+    15: { 'nombre': 'Eva Alexandra Nogueira Rodrigues' , 'puesto': 'flauta' },
+    16: { 'nombre': 'María Monserrat Velázquez Gómez' , 'puesto': 'fagot' },
+    17: { 'nombre': 'Ana Silvia Guerrero González' , 'puesto': 'piano' },
+    18: { 'nombre': 'Jorge Eduardo Aceves Cisneros' , 'puesto': 'percusiones' }
 }
-docs = ['32d', 'ecuenta', 'factura', 'dbancarios',  'sitfiscal', 'foto1','foto2','foto3','foto4']
+docs = ['32d', 'ecuenta', 'factura', 'sitfiscal', 'foto1','foto2','foto3','foto4']
 
 #############
 #APP y RUTAS#

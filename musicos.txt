@@ -1,0 +1,21 @@
+{
+    1:  { 'nombre': 'Allen Vladimir Gómez', 'puesto' : 'dirección'},
+    2:  { 'nombre':'Roberto Carlos Hernández Estrada' , 'puesto': 'bibliotecario y administrativo' },
+    3:  { 'nombre': 'Diana Carolina Laguna Rivas' , 'puesto' : 'violín' },
+    4:  { 'Francisco Vidal Rivera González' , 'puesto': 'violín' },
+    5:  { 'Paris Ayala Buenrostro' , 'puesto' : 'violín' },
+    6:  { 'Ramón Lemus Bravo' , 'puesto' : 'violín' },
+    7:  { 'Sergio Rodríguez Barrón' , 'puesto': 'violín' },
+    8:  { 'Robert Carl Nelson' , 'puesto': 'viola' },
+    9:  { 'René Eduardo Nuño Guzmán' , 'puesto': 'viola' },
+    10: { 'Deni González Miniashkin' , 'puesto': 'contrabajo' },
+    11: { 'Jorge Alfonso González Jiménez' , 'puesto': 'violoncello' },
+    12: { 'Yalissa Cruz Espino' , 'puesto': 'violoncello' },
+    13: { 'Alfonso Chen Arellano' , 'puesto': 'clarinete' },
+    14: { 'David Alejandro Padilla Guerrero' , 'puesto': 'oboe' } ,
+    15: { 'Eva Alexandra Nogueira Rodrigues' , 'puesto': 'flauta' },
+    16: { 'María Monserrat Velázquez Gómez' , 'puesto': 'fagot' },
+    17: { 'Ana Silvia Guerrero González' , 'puesto': 'piano' },
+    18: { 'Jorge Eduardo Aceves Cisneros' , 'puesto': 'percusiones' }
+
+}
