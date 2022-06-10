@@ -54,7 +54,7 @@ if not os.path.isdir(UPLOAD_FOLDER):
 
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
-ALLOWED_EXTENSIONS = set([ 'pdf', 'xml', 'jpg', 'jpeg']) # Allowed extension you can set your own
+ALLOWED_EXTENSIONS = set([ 'pdf', 'xml', 'jpg', 'jpeg', 'png', 'gif']) # Allowed extension you can set your own
 def allowed_file(filename):
     return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
@@ -103,6 +103,7 @@ def upload_docs():
                     filename = str(idmusico) + '-foto' + str(files.index(file)+1) + '-' + mes_actual + '.' + filename[-3:]
                     file.save( os.path.join( app.config[ 'UPLOAD_FOLDER' ], doctype + '/' + filename ))
                     image = Image.open('static/files/' + doctype+ '/' + filename)
+                    image = image.convert('RGB')
 
                     # Manipulacion de imagenes, resizeo
                     dim     =   image.size #obtener tamaño de imagen

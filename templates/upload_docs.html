@@ -24,15 +24,24 @@
         
     <h2>Mes de {{ mes }}</h2>
     <form action="upload_docs" method="post" enctype="multipart/form-data">
-        <input type="file" name="files[]" multiple="true" autocomplete="off" required>
-        <input type="hidden" name = "doctype" value="{{ doctype }}">
+        <input type="file" name="files[]" multiple="true" id="docorfotos" autocomplete="off" required>
+        <input type="hidden" name = "doctype" value="{{ doctype }}" id="doctype">
         <input type="hidden" name = "idmusico" value = "{{ idmusico }}">
-        <input type="submit" value="manda">
+        <input type="submit" value="manda" onclick="cuentaFotos()" >
 
     </form>
         
 </div>
-
+<script>
+function cuentaFotos(){
+    let ele = document.getElementById( 'docorfotos' ).files.length;
+    let doc = document.getElementById( 'doctype' ).value;
+    if( ele < 4 && doc.slice(0,4) === 'foto'){
+        alert('No pueden ser menos de 4 fotos', ele, ' seleccionadas');
+        location.reload();
+    }
+}
+</script>
 {% endblock %}
 
 

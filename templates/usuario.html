@@ -20,6 +20,7 @@
             {% else %}
                     <td> no existe, <a href="{{ url_for('upload_docs', idmusico = idmusico|string, doctype = d) }}">subir archivo</a> </td>
             {% endif %}
+                    <td> <a href="{{ url_for('upload_docs', idmusico = idmusico|string, doctype = d) }}"> modificar archivo</a> </td>
         </tr>
 
     {% endfor %}
