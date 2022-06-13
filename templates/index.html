@@ -24,33 +24,37 @@
                 <th>Reporte  <br> actividades</th>
                 <th>Carta <br> datos bancarios</th>
         
-        <tr>
         {% for k,v in musicos.items() %}
-            <td>{{ k  }}</td>
-            <td><a href="{{ url_for('user', idmusico = k) }}">{{ v['nombre'] }}</a></td>
-            <td>{{ v['puesto']}}</td>
+        <tr id = {{ k|string  }}>
+            <td  >{{ k  }}</td>
+            <td  ><a href="{{ url_for('user', idmusico = k) }}">{{ v['nombre'] }}</a></td>
+            <td  >{{ v['puesto']}}</td>
             
             {% for d in docs%}
             {% set cadena = k|string + '-' + d + '-' + mes %}
 
                 {% if cadena + '.pdf' in archivos[d] %}
-                    <td> <a href="{{ url_for('static', filename= 'files/'+ d + '/' + cadena + '.pdf') }}"> {{  cadena + '.pdf' }} </a> </td>
+                    <td   > <a href="{{ url_for('static', filename= 'files/'+ d + '/' + cadena + '.pdf') }}"> {{  cadena + '.pdf' }} </a> </td>
                 {% elif cadena + '.jpg' in archivos[d] %}
-                    <td> <a href="{{ url_for('static', filename= 'files/'+ d + '/' + cadena + '.jpg') }}"> {{  cadena + '.jpg' }} </a> </td>
+                    <td  > <a href="{{ url_for('static', filename= 'files/'+ d + '/' + cadena + '.jpg') }}"> {{  cadena + '.jpg' }} </a> </td>
                 {% else %}
-                    <td>  <a href="{{ url_for('upload_docs', idmusico = k|string, doctype = d) }}"> + </a> </td>
+                    <td  >  <a href="{{ url_for('upload_docs', idmusico = k|string, doctype = d) }}"> + </a> </td>
                 {% endif %}
 
             {% endfor %}
             {# Columna con reportes #}
-                    <td><a href="{{ url_for('muestra_calendario' , idmusico=k) }}">reporte</a></td>
+                    <td  ><a href="{{ url_for('muestra_calendario' , idmusico=k) }}">reporte</a></td>
             {# Columna con estados de cuenta#}
-                    <td><a href="{{ url_for('login' , idmusico=k) }}">cartas <br> bancarias </a></td>
+                    <td  ><a href="{{ url_for('login' , idmusico=k) }}">cartas <br> bancarias </a></td>
             </tr>
 
         {% endfor %}
     </table>
     </div>
+
+
+    <script src="{{ url_for( 'static', filename='scripts.js' ) }}"></script>
+
 
 
     {% endblock %}
