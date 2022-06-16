@@ -1,5 +1,6 @@
-{% extends 'base.html' %}
+{% extends 'base2.html' %}
 {% block contenido %}
+<div class="wrapp3">
 <div class="title">
 <p>
     Lic. CRISTOPHER DE ALBA ANGUIANO  <br>
@@ -35,31 +36,30 @@
 
 </p>
 </div>
-        <div class="wrapp">
         {% for i in range( 0, diasmes + primerdiamessemana | int ) %}
             {% if i < primerdiamessemana | int  %}
-            <div class='calendar'>
-                    {{ dias_espanol[i] }} <br> <br>    
-            </div>
+                <div class='calendar'>
+                        {{ dias_espanol[i] }} <br> <br>    
+                </div>
 
             {% else %}
                 <div class='calendar'>
-                {{ i + 1|int - primerdiamessemana | int }}
-                {{ dias_espanol[i] }} <br> <br>    
-                {% if data[(i+1-primerdiamessemana|int) | string ]   == 'x' %}
-                    <p>Ensayo en ccc</p>
-                {% elif data[(i +1-primerdiamessemana|int)| string] == 'y' %}
-                    <p>Concierto de temporada</p>
-                {% elif data[(i+1-primerdiamessemana|int)| string] == 'z' %}
-                    <p>Estudio personal</p>
-                {% else %}
-                    <p> {{ data[(i+1-primerdiamessemana|int) | string]}}</p>
-                {% endif %} 
+                    {{ i + 1|int - primerdiamessemana | int }}
+                    {{ dias_espanol[i] }} <br> <br>    
+                    {% if data[(i+1-primerdiamessemana|int) | string ]   == 'x' %}
+                        <p>Ensayo en ccc</p>
+                    {% elif data[(i +1-primerdiamessemana|int)| string] == 'y' %}
+                        <p>Concierto de temporada</p>
+                    {% elif data[(i+1-primerdiamessemana|int)| string] == 'z' %}
+                        <p>Estudio personal</p>
+                    {% else %}
+                        <p> {{ data[(i+1-primerdiamessemana|int) | string]}}</p>
+                    {% endif %} 
                 </div>
             {% endif %}
             
         {% endfor %}
-        </div>
+</div>
         <p class="break"></p>
         <div class="wrapp2">
             {% for x in range(1,5) %}

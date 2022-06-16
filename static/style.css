@@ -1,16 +1,27 @@
 body{ font-family: 'Courier New', Courier, monospace; font-size: 12px;
 background-color: #083a6381; margin: 0 5% 0 5%; }
-div{  padding: 3%;  background-color:white}
+div{  padding: 3%;  background-color:white; }
+
+h1, h2 , h3{ color: #083a6381; margin:.3em; padding-top: 0}
+h1.black{ color: black; font-weight: 100; }
+h1.gray{ color: #b7b7b7; font-size: 1.5em; }
+
 .calendar{ border: 1px solid black; padding: 2%; }
-.wrapp{ display: grid; grid-template-columns: repeat(7, auto); background-color: white;}
-.title{ grid-column: 1 / 8;}
-.wrapp2{ display: grid; grid-template-columns: repeat(2, auto)}
+.wrapp{ display: grid; grid-template-columns: repeat(13, auto); background-color: white;}
+.wrapp2{ display: grid; grid-template-columns: repeat(2, auto); background-color: white;}
+.wrapp3{ display: grid; grid-template-columns: repeat(7, auto)}
+.title{ grid-column: 1 / 8; padding:.6em}
+.title2{ grid-column: 1 / 14; padding:.6em}
+
+
 table, tr, td{  padding: 0.2em}
 #usuario tr td{ padding: 1em}
-th { padding-left: 0.4em; padding-right: 0.4em;}
+th { padding-left: 0.4em; padding-right: 0.4em; padding-bottom:.7em; padding-top:.7em; border-bottom:1px solid gray; border-top:1px solid gray}
+.blue{ color: #083a6381;}
 form{ margin: 0; padding: 0; display: grid}
 @media print{ .break{page-break-after: always;} }
-a:link{ color: black}
-a:visited{ color: black}
-a:hover{ color: #083a6381; font-size:1.1em}
-a:active{ background-color:#e8e8e8}
+a:link{ color: black; text-decoration:none}
+a:visited{ color: black; text-decoration:none}
+a:hover{ color: #083a6381; font-size:1.2em; text-decoration:none}
+a:active{ background-color:#e8e8e8; text-decoration:none}
+.alert{ color: #C80C0B!important;}

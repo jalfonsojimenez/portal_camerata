@@ -1,11 +1,14 @@
 {% extends 'base.html' %}
 {% block contenido %}
-    <div class="title"><h2> Sistema de alta de Documentos <br> <br>
-         Orquesta de Cámara de Zapopan </h2>
-         <h3>{{ mes }} de {{ anio }}</h3>
+    <div class="title">
+    <center>
+        <h1 class="gray"> Sistema de alta de Documentos, </h1>
+        <h1 > Orquesta de Cámara de Zapopan </h1>
+             <b>{{ mes }} de {{ anio }}</b> <br> <br>
+             <a href="{{ url_for('login' , idmusico=1) }}">crear o  modificar calendario</a>
+         </center>
     </div>
     <div class="title">
-    
     <table>
                 <th>id</th>
                 <th>nombre</th>
@@ -38,13 +41,13 @@
                 {% elif cadena + '.jpg' in archivos[d] %}
                     <td  > <a href="{{ url_for('static', filename= 'files/'+ d + '/' + cadena + '.jpg') }}"> {{  cadena + '.jpg' }} </a> </td>
                 {% else %}
-                    <td  >  <a href="{{ url_for('upload_docs', idmusico = k|string, doctype = d) }}"> + </a> </td>
+                    <td  > <center><a class="alert" href="{{ url_for('upload_docs', idmusico = k|string, doctype = d) }}"> subir</a> </center></td>
                 {% endif %}
 
             {% endfor %}
             {# Columna con reportes #}
                     <td  ><a href="{{ url_for('muestra_calendario' , idmusico=k) }}">reporte</a></td>
-            {# Columna con estados de cuenta#}
+            {# Columna con carta de datos bancarios #}
                     <td  ><a href="{{ url_for('login' , idmusico=k) }}">cartas <br> bancarias </a></td>
             </tr>
 

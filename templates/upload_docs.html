@@ -3,24 +3,22 @@
 {% block contenido %}
 
 <div class="title">
-    <h1>Dar de alta
+    <h1>Dar de alta <br>
+
     {% if doctype == 'ecuenta' %}
-        Estado de Cuenta
+        <span class="blue">
+            Estado de Cuenta
+        </span>
     {% elif doctype[0:4] == 'foto' %}
-
         Fotos </h1> <br>
-
         <h3>Selecciona EN GRUPO todas las fotos que vayas a subir </h3>
-
     {% else %}
-
+        <span class="blue">
         {{ doctype }} </h1>
-
+        </span>
     {% endif %}
 
     <br> <h2> {{ musicos[idmusico|int]['nombre'] }} </h2> 
-
-
         
     <h2>Mes de {{ mes }}</h2>
     <form action="upload_docs" method="post" enctype="multipart/form-data">
@@ -36,7 +34,7 @@
 function cuentaFotos(){
     let ele = document.getElementById( 'docorfotos' ).files.length;
     let doc = document.getElementById( 'doctype' ).value;
-    if( ele < 4 && doc.slice(0,4) === 'foto'){
+    if( ele != 4 && doc.slice(0,4) === 'foto'){
         alert('No pueden ser menos de 4 fotos', ele, ' seleccionadas');
         location.reload();
     }

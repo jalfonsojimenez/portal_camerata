@@ -81,12 +81,27 @@ def lee_archivos(docs):
         archivos[doc] = os.listdir( './static/files/' + doc )
     return archivos
 
+###################
+###   RUTAS     ###
+###################
+
 @app.route('/')
 def index():
 
     archivos = lee_archivos(docs)
 
     return render_template('index.html', musicos = musicos , mes = mes_actual, anio = anio, \
+                            docs = docs, archivos = archivos)
+@app.route('/entrada')
+def entrada():
+    return render_template('entrada.html', musicos = musicos)
+
+@app.route('/index2')
+def index2():
+
+    archivos = lee_archivos(docs)
+
+    return render_template('index2.html', musicos = musicos , mes = mes_actual, anio = anio, \
                             docs = docs, archivos = archivos)
 
 @app.route('/upload_docs', methods=['GET', 'POST'])
@@ -138,8 +153,12 @@ def upload_docs():
 
     return render_template('upload_docs.html', musicos = musicos, idmusico = idmusico, mes = mes_actual, doctype = doctype)
 
+filename = os.path.join(app.static_folder, 'calendarios', 'calendario'+mes_actual+'.json')
 @app.route('/crea_calendario', methods=['GET','POST'])
 def crea_calendario():
+    with open(filename) as test_file:
+        data = json.load(test_file)
+
     fechasCalendario = {}
     multi_dict = request.form
     if request.method == 'POST':
@@ -154,16 +173,11 @@ def crea_calendario():
         return redirect( '/'  )
 
     return render_template('crea_calendario.html', diasmes=diasmes , dias_espanol = dias_espanol, \
-                            primerdiamessemana=primerdiamessemana, mes_actual=mes_actual, anio=anio)
-
-
-filename = os.path.join(app.static_folder, 'calendarios', 'calendario'+mes_actual+'.json')
+                            primerdiamessemana=primerdiamessemana, mes_actual=mes_actual, anio=anio, data = data)
 
 @app.route('/muestra_calendario/<idmusico>', methods=['GET'])
 def muestra_calendario(idmusico):
-    #idmusico    = request.args.get('idmusico', type= int) 
     idmusico    =   idmusico 
-    print(idmusico)
     with open(filename) as test_file:
         data = json.load(test_file)
 
@@ -173,6 +187,8 @@ def muestra_calendario(idmusico):
 @app.route('/login/<idmusico>', methods=['GET', 'POST'])
 def login(idmusico):
     idmusico = int( idmusico )
+    with open(filename) as test_file:
+        data = json.load(test_file)
     if idmusico in musicos: #checa si está en la lista para evitar hackeos
         if request.method == 'POST':
             password = request.form['password']
@@ -183,6 +199,9 @@ def login(idmusico):
                 return render_template('muestra_dba.html', idmusico = idmusico, musicos = musicos, \
                                         datos = datos, filenamedba = filenamedba, diasmes=diasmes, mes_actual=mes_actual, anio = anio)
                 #return redirect('/muestra_dba')
+            if password == 'exitosos':
+                return render_template('crea_calendario.html', diasmes=diasmes , dias_espanol = dias_espanol, \
+                                        primerdiamessemana=primerdiamessemana, mes_actual=mes_actual, anio=anio, data = data)
             else:
                 return redirect('/')
     else:
@@ -197,12 +216,22 @@ def muestra_dba(idmusico):
     return render_template('muestra_calendario.html', idmusico=idmusico, datos = datos, diasmes=diasmes , dias_espanol = dias_espanol, \
                             primerdiamessemana=primerdiamessemana, mes_actual=mes_actual, anio=anio, musicos = musicos)
 
-@app.route('/usuario/<idmusico>', methods=['GET']) #Ruta para ver documentos por usuario
-def user(idmusico):
-    idmusico    = int(idmusico)
-    
+#@app.route('/usuario/<idmusico>', methods=['GET','POST']) #Ruta para ver documentos por usuario
+#def user(idmusico):
+    #idmusico    = int(idmusico)
+
+    #return render_template('usuario.html', idmusico = idmusico, musicos = musicos, docs = docs, mes = mes_actual,  archivos = archivos)
+@app.route('/usuario', methods=['GET', 'POST'])
+def user():
     archivos = lee_archivos( docs )
-    return render_template('usuario.html', idmusico = idmusico, musicos = musicos, docs = docs, mes = mes_actual,  archivos = archivos)
+    if request.method == 'POST':
+        idmusico = int( request.form['idmusico'] ) 
+
+        return render_template('usuario.html', idmusico = idmusico, musicos = musicos, docs = docs, mes = mes_actual,  archivos = archivos)
+    else:
+        idmusico = int(request.args.get('idmusico'))
+        return render_template('usuario.html', idmusico = idmusico, musicos = musicos, docs = docs, mes = mes_actual,  archivos = archivos)
+ 
 
 
 if __name__ == '__main__':

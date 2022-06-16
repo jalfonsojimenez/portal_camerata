@@ -1,10 +1,12 @@
 {% extends 'base.html' %}
 {% block contenido %}
 <div>
-    <h1>
+    <h3>
         Modificar o subir datos <br>
-        {{ musicos[idmusico]['nombre'] }}
-    </h1>
+    </h3>
+        <h1 class="black">
+            {{ musicos[idmusico]['nombre'] }}
+        </h1>
     <h2>Archivos mes de {{ mes  }}</h2>
     <table id="usuario">
     <th>Documento</th>
@@ -18,12 +20,22 @@
             {% elif cadena + '.jpg' in archivos[d] %}
                     <td> <a href="{{ url_for('static', filename= 'files/'+ d + '/' + cadena + '.jpg') }}"> {{  cadena + '.jpg' }} </a> </td>
             {% else %}
-                    <td> no existe, <a href="{{ url_for('upload_docs', idmusico = idmusico|string, doctype = d) }}">subir archivo</a> </td>
+                    <td> no existe, <a class="alert" href="{{ url_for('upload_docs', idmusico = idmusico|string, doctype = d) }}">subir archivo</a> </td>
             {% endif %}
                     <td> <a href="{{ url_for('upload_docs', idmusico = idmusico|string, doctype = d) }}"> modificar archivo</a> </td>
         </tr>
 
     {% endfor %}
+        {# Columna con reporte #} 
+        <tr>
+            <td>Reporte</td>
+            <td  ><a href="{{ url_for('muestra_calendario' , idmusico=idmusico) }}">ver reporte</a></td>
+        </tr>
+        {# Columna con carta de datos bancarios #} 
+        <tr>
+            <td>Carta de <br> datos bancarios</td>
+            <td  ><a href="{{ url_for('login' , idmusico=idmusico ) }}">ver carta de <br> datos bancarios </a></td>
+        </tr>
     </table>
 <br> <br>
 
