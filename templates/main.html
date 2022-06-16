@@ -1,0 +1,64 @@
+{% extends 'base.html' %}
+{% block contenido %}
+    <div class="title">
+        <center>
+            <h1 class="gray"> Sistema de alta de Documentos, </h1>
+            <h1 > Orquesta de Cámara de Zapopan </h1>
+                 <b>{{ mes }} de {{ anio }}</b> <br> <br>
+                 <a href="{{ url_for('index') }}">inicio </a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                 <a href="{{ url_for('logincal' ) }}">crear o  modificar calendario</a>
+         </center>
+    </div>
+    <div class="title">
+    <table>
+                <th>id</th>
+                <th>nombre</th>
+                <th>puesto</th>
+
+                <th>32 D <br> {{ mes }}</th>
+                <th>Estado <br> de cuenta </th>
+                <th>Factura <br> {{ mes }}</th>
+                <th>Constancia <br> situacion <br>  fiscal</th>
+
+                <th>foto <br>1</th>
+                <th>foto <br>2</th>
+                <th>foto <br>3</th>
+                <th>foto <br>4</th>
+
+                <th>Reporte  <br> actividades</th>
+                <th>Carta <br> datos bancarios</th>
+        
+        {% for k,v in musicos.items() %}
+        <tr id = {{ k|string  }}>
+            <td  >{{ k  }}</td>
+            <td  ><a href="{{ url_for('user', idmusico = k) }}">{{ v['nombre'] }}</a></td>
+            <td  >{{ v['puesto']}}</td>
+            
+            {% for d in docs%}
+            {% set cadena = k|string + '-' + d + '-' + mes %}
+
+                {% if cadena + '.pdf' in archivos[d] %}
+                    <td   > <a href="{{ url_for('static', filename= 'files/'+ d + '/' + cadena + '.pdf') }}"> {{  cadena + '.pdf' }} </a> </td>
+                {% elif cadena + '.jpg' in archivos[d] %}
+                    <td  > <a href="{{ url_for('static', filename= 'files/'+ d + '/' + cadena + '.jpg') }}"> {{  cadena + '.jpg' }} </a> </td>
+                {% else %}
+                    <td  > <center><a class="alert" href="{{ url_for('upload_docs', idmusico = k|string, doctype = d) }}"> subir</a> </center></td>
+                {% endif %}
+
+            {% endfor %}
+            {# Columna con reportes #}
+                    <td  ><a href="{{ url_for('muestra_calendario' , idmusico=k) }}">reporte</a></td>
+            {# Columna con carta de datos bancarios #}
+                    <td  ><a href="{{ url_for('login' , idmusico=k) }}">cartas <br> bancarias </a></td>
+            </tr>
+
+        {% endfor %}
+    </table>
+    </div>
+
+
+    <script src="{{ url_for( 'static', filename='scripts.js' ) }}"></script>
+
+
+
+    {% endblock %}

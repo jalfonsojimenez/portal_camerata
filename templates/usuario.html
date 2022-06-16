@@ -7,10 +7,11 @@
         <h1 class="black">
             {{ musicos[idmusico]['nombre'] }}
         </h1>
-    <h2>Archivos mes de {{ mes  }}</h2>
+    <h1 class="gray">Archivos mes de {{ mes  }}</h1>
     <table id="usuario">
     <th>Documento</th>
     <th>Status</th>
+    <th> </th>
     {% for d in docs %}
         {% set cadena = idmusico|string + '-' + d + '-' + mes %}
         <tr>
@@ -39,7 +40,7 @@
     </table>
 <br> <br>
 
-<p> <a href="{{ url_for('index') }}">Regresar</a></p>
+<p> <a href="{{ url_for('main') }}">Regresar</a></p>
 
 </div>
 

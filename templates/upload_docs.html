@@ -3,24 +3,24 @@
 {% block contenido %}
 
 <div class="title">
-    <h1>Dar de alta <br>
+    <h3>Dar de alta 
 
     {% if doctype == 'ecuenta' %}
-        <span class="blue">
             Estado de Cuenta
-        </span>
     {% elif doctype[0:4] == 'foto' %}
-        Fotos </h1> <br>
-        <h3>Selecciona EN GRUPO todas las fotos que vayas a subir </h3>
+        Fotos </h3> <br>
+        <h3 class="alert">Selecciona EN GRUPO todas las fotos que vayas a subir </h3>
     {% else %}
-        <span class="blue">
+        <h2 class="gray">
         {{ doctype }} </h1>
-        </span>
+        </h2>
     {% endif %}
 
-    <br> <h2> {{ musicos[idmusico|int]['nombre'] }} </h2> 
+    <br> <h1 class="black"> {{ musicos[idmusico|int]['nombre'] }} </h1> 
         
-    <h2>Mes de {{ mes }}</h2>
+    <h1 class="gray">Mes de {{ mes }}</h1>
+    <br>
+    
     <form action="upload_docs" method="post" enctype="multipart/form-data">
         <input type="file" name="files[]" multiple="true" id="docorfotos" autocomplete="off" required>
         <input type="hidden" name = "doctype" value="{{ doctype }}" id="doctype">

@@ -6,7 +6,7 @@ h1, h2 , h3{ color: #083a6381; margin:.3em; padding-top: 0}
 h1.black{ color: black; font-weight: 100; }
 h1.gray{ color: #b7b7b7; font-size: 1.5em; }
 
-.calendar{ border: 1px solid black; padding: 2%; }
+.calendar{ border: 1px solid black; padding: 2%; font-size:.8em }
 .wrapp{ display: grid; grid-template-columns: repeat(13, auto); background-color: white;}
 .wrapp2{ display: grid; grid-template-columns: repeat(2, auto); background-color: white;}
 .wrapp3{ display: grid; grid-template-columns: repeat(7, auto)}

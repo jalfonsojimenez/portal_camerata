@@ -49,6 +49,7 @@ musicos = {
 }
 docs = ['32d', 'ecuenta', 'factura', 'sitfiscal', 'foto1','foto2','foto3','foto4']
 
+
 #############
 #APP y RUTAS#
 #############
@@ -59,6 +60,7 @@ app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024
 
 path = os.getcwd() # Get current path
 UPLOAD_FOLDER = os.path.join(path, 'static/files/') # file Upload
+filename = os.path.join(app.static_folder, 'calendarios', 'calendario'+mes_actual+'.json')
 
 # Make directory if uploads is not exists
 if not os.path.isdir(UPLOAD_FOLDER):
@@ -81,28 +83,23 @@ def lee_archivos(docs):
         archivos[doc] = os.listdir( './static/files/' + doc )
     return archivos
 
+def abreCal():
+    with open(filename) as test_file:
+        data = json.load(test_file)
+        return data
+
 ###################
 ###   RUTAS     ###
 ###################
 
+@app.route('/main')
+def main():
+    archivos = lee_archivos(docs)
+    return render_template('main.html', musicos = musicos , mes = mes_actual, anio = anio, \
+                            docs = docs, archivos = archivos)
 @app.route('/')
 def index():
-
-    archivos = lee_archivos(docs)
-
-    return render_template('index.html', musicos = musicos , mes = mes_actual, anio = anio, \
-                            docs = docs, archivos = archivos)
-@app.route('/entrada')
-def entrada():
-    return render_template('entrada.html', musicos = musicos)
-
-@app.route('/index2')
-def index2():
-
-    archivos = lee_archivos(docs)
-
-    return render_template('index2.html', musicos = musicos , mes = mes_actual, anio = anio, \
-                            docs = docs, archivos = archivos)
+    return render_template('index.html', musicos = musicos)
 
 @app.route('/upload_docs', methods=['GET', 'POST'])
 def upload_docs():
@@ -146,18 +143,17 @@ def upload_docs():
 
                 else: #Si son documentos los guarda solamente
                     file.save( os.path.join( app.config[ 'UPLOAD_FOLDER' ], doctype + '/' + filename ))
-            
         flash( 'Archivos subidos con éxito ')
-        return redirect( '/' )
-
+        return redirect( url_for( 'user', idmusico = idmusico ) )
 
     return render_template('upload_docs.html', musicos = musicos, idmusico = idmusico, mes = mes_actual, doctype = doctype)
 
-filename = os.path.join(app.static_folder, 'calendarios', 'calendario'+mes_actual+'.json')
+
 @app.route('/crea_calendario', methods=['GET','POST'])
 def crea_calendario():
-    with open(filename) as test_file:
-        data = json.load(test_file)
+    #with open(filename) as test_file:
+        #data = json.load(test_file)
+    data = abreCal()
 
     fechasCalendario = {}
     multi_dict = request.form
@@ -170,17 +166,15 @@ def crea_calendario():
         calendario = 'calendario' + mes_actual #Pone nombre de calendario y mes actual para guardar como archivo json
         with open('static/calendarios/'+calendario+'.json','w') as fp:
             json.dump( fechasCalendario, fp, indent=4 ) #escribe el json con las fechas enviadas
-        return redirect( '/'  )
+        return redirect( '/main'  )
 
     return render_template('crea_calendario.html', diasmes=diasmes , dias_espanol = dias_espanol, \
                             primerdiamessemana=primerdiamessemana, mes_actual=mes_actual, anio=anio, data = data)
 
 @app.route('/muestra_calendario/<idmusico>', methods=['GET'])
 def muestra_calendario(idmusico):
-    idmusico    =   idmusico 
-    with open(filename) as test_file:
-        data = json.load(test_file)
-
+    idmusico    = int( idmusico )
+    data = abreCal()
     return render_template('muestra_calendario.html', idmusico=idmusico, data = data, diasmes=diasmes , dias_espanol = dias_espanol, \
                             primerdiamessemana=primerdiamessemana, mes_actual=mes_actual, anio=anio, musicos = musicos)
 
@@ -198,21 +192,25 @@ def login(idmusico):
                     datos = json.load(f)
                 return render_template('muestra_dba.html', idmusico = idmusico, musicos = musicos, \
                                         datos = datos, filenamedba = filenamedba, diasmes=diasmes, mes_actual=mes_actual, anio = anio)
-                #return redirect('/muestra_dba')
-            if password == 'exitosos':
-                return render_template('crea_calendario.html', diasmes=diasmes , dias_espanol = dias_espanol, \
-                                        primerdiamessemana=primerdiamessemana, mes_actual=mes_actual, anio=anio, data = data)
-            else:
-                return redirect('/')
     else:
         return redirect('/')
     return render_template( 'login.html', idmusico = idmusico, musicos = musicos, mes_actual = mes_actual)
 
+@app.route('/logincal', methods=['POST','GET'])
+def logincal():
+    with open(filename) as test_file:
+        data = json.load(test_file)
+    if request.method == 'POST':
+        password = request.form['password']
+        if password == 'camerata':
+            return render_template('crea_calendario.html', diasmes=diasmes , dias_espanol = dias_espanol, \
+                            primerdiamessemana=primerdiamessemana, mes_actual=mes_actual, anio=anio, data = data)
+        else:
+            return redirect('/')
+    return render_template('logincal.html')
 
 @app.route('/muestra_dba/', methods=['POST']) #Ruta para mostrar datos bancarios
 def muestra_dba(idmusico):
-    #idmusico    = request.args.get('idmusico', type= int) 
-
     return render_template('muestra_calendario.html', idmusico=idmusico, datos = datos, diasmes=diasmes , dias_espanol = dias_espanol, \
                             primerdiamessemana=primerdiamessemana, mes_actual=mes_actual, anio=anio, musicos = musicos)
 
@@ -231,7 +229,6 @@ def user():
     else:
         idmusico = int(request.args.get('idmusico'))
         return render_template('usuario.html', idmusico = idmusico, musicos = musicos, docs = docs, mes = mes_actual,  archivos = archivos)
- 
 
 
 if __name__ == '__main__':
