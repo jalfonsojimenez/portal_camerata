@@ -21,6 +21,7 @@ meses = ['enero', 'febrero', 'marzo', 'abril', 'mayo', \
 mes_actual = meses[int(mes)-1] # mes actual en español, lo checa en la lista -1 elementos, el array empieza en 0
 dias_espanol  = ['domingo','lunes','martes','miércoles','jueves','viernes','sábado']
 today = datetime.now()
+dia = today.strftime('%d-%m-%Y-%H:%M')
 mes = today.strftime('%m')
 anio = today.strftime('%Y') 
 primerdiames = datetime(int(anio),int(mes),1) 
@@ -80,13 +81,19 @@ def lee_archivos(docs):
     archivos    = {}
     for doc in docs:
         pati.append('./static/files/' + doc)
-        archivos[doc] = os.listdir( './static/files/' + doc )
+        try:
+            archivos[doc] = os.listdir( './static/files/' + doc )
+        except:
+            os.mkdir( './static/files/' + doc )
     return archivos
 
 def abreCal():
     with open(filename) as test_file:
         data = json.load(test_file)
         return data
+        
+
+#def abre_file_log():
 
 ###################
 ###   RUTAS     ###
@@ -95,6 +102,7 @@ def abreCal():
 @app.route('/main')
 def main():
     archivos = lee_archivos(docs)
+    print( archivos )
     return render_template('main.html', musicos = musicos , mes = mes_actual, anio = anio, \
                             docs = docs, archivos = archivos)
 @app.route('/')
@@ -105,6 +113,7 @@ def index():
 def upload_docs():
     idmusico    = request.args.get( 'idmusico' ) 
     doctype     = request.args.get( 'doctype' )
+    dict_file   = {}
 
     if request.method == 'POST':
         if 'files[]' not in request.files:
@@ -138,21 +147,25 @@ def upload_docs():
                     imagenr =   image.resize( newsize ) #resizea la imagen y la guarda como imagenr
                     
                     # guardar foto 
-                    filenametosave = filename.split('.')[0] 
-                    imagenr.save( 'static/files/'+ 'foto' + str(files.index(file)+1) + '/' + filenametosave + '.jpg' )
+                    filenametosave  = filename.split('.')[0] 
+                    #Anteriormente se hacia esto
+                    #imagenr.save( 'static/files/'+ 'foto' + str(files.index(file)+1) + '/' + filenametosave + '.jpg' )
+                    nombrefoto      = 'static/files/'+ 'foto' + str(files.index(file)+1) + '/' + filenametosave + '.jpg' 
+                    imagenr.save( nombrefoto )
+
 
                 else: #Si son documentos los guarda solamente
                     file.save( os.path.join( app.config[ 'UPLOAD_FOLDER' ], doctype + '/' + filename ))
+                    dict_file[filename] = dia
+                    with open('static/files/'  + 'registro_uploads' + doctype + mes_actual + '.json','a') as dp:
+                        json.dump( dict_file, dp, indent=4 ) #escribe el json con las fechas enviadas
         flash( 'Archivos subidos con éxito ')
         return redirect( url_for( 'user', idmusico = idmusico ) )
 
-    return render_template('upload_docs.html', musicos = musicos, idmusico = idmusico, mes = mes_actual, doctype = doctype)
-
+    return render_template('upload_docs.html', musicos = musicos, idmusico = idmusico, mes = mes_actual, doctype = doctype, dia = dia)
 
 @app.route('/crea_calendario', methods=['GET','POST'])
 def crea_calendario():
-    #with open(filename) as test_file:
-        #data = json.load(test_file)
     data = abreCal()
 
     fechasCalendario = {}
@@ -214,11 +227,6 @@ def muestra_dba(idmusico):
     return render_template('muestra_calendario.html', idmusico=idmusico, datos = datos, diasmes=diasmes , dias_espanol = dias_espanol, \
                             primerdiamessemana=primerdiamessemana, mes_actual=mes_actual, anio=anio, musicos = musicos)
 
-#@app.route('/usuario/<idmusico>', methods=['GET','POST']) #Ruta para ver documentos por usuario
-#def user(idmusico):
-    #idmusico    = int(idmusico)
-
-    #return render_template('usuario.html', idmusico = idmusico, musicos = musicos, docs = docs, mes = mes_actual,  archivos = archivos)
 @app.route('/usuario', methods=['GET', 'POST'])
 def user():
     archivos = lee_archivos( docs )
@@ -229,7 +237,6 @@ def user():
     else:
         idmusico = int(request.args.get('idmusico'))
         return render_template('usuario.html', idmusico = idmusico, musicos = musicos, docs = docs, mes = mes_actual,  archivos = archivos)
-
 
 if __name__ == '__main__':
     app.run(host='127.0.0.1', port=8000, debug=True)
