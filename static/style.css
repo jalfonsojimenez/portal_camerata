@@ -25,3 +25,4 @@ a:visited{ color: black; text-decoration:none}
 a:hover{ color: #083a6381; font-size:1.2em; text-decoration:none}
 a:active{ background-color:#e8e8e8; text-decoration:none}
 .alert{ color: #C80C0B!important;}
+.fecha{ font-size:.7em; color:#413F42}

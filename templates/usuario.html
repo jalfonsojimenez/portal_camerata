@@ -17,13 +17,28 @@
         <tr>
             <td>{{ d }}</td>
             {% if cadena + '.pdf' in archivos[d] %}
-                    <td> <a href="{{ url_for('static', filename= 'files/'+ d + '/' + cadena + '.pdf') }}"> {{  cadena + '.pdf' }} </a> </td>
+                    <td><center>
+                        <a href="{{ url_for('static', filename= 'files/'+ d + '/' + cadena + '.pdf') }}">
+                        <img src="{{ url_for('static', filename='img/cleared.png') }}" alt=""></a> 
+                        {% if idmusico|string + '-' + d + '-' + mes + '.pdf' in fechas_dict %} <br> <span  class="fecha">subido el: {{ fechas_dict[cadena+'.pdf'] }} </span>{% endif %}
+                       </center>
+                    </td>
             {% elif cadena + '.jpg' in archivos[d] %}
                     <td> <a href="{{ url_for('static', filename= 'files/'+ d + '/' + cadena + '.jpg') }}"> {{  cadena + '.jpg' }} </a> </td>
             {% else %}
-                    <td> no existe, <a class="alert" href="{{ url_for('upload_docs', idmusico = idmusico|string, doctype = d) }}">subir archivo</a> </td>
+                    <td> 
+                        <center>
+                            <a class="alert" href="{{ url_for('upload_docs', idmusico = idmusico|string, doctype = d) }}">
+                            <img src="{{ url_for('static', filename='img/upload.png') }}" alt="subir archivo"></a>
+                        </center>
+                    </td>
             {% endif %}
-                    <td> <a href="{{ url_for('upload_docs', idmusico = idmusico|string, doctype = d) }}"> modificar archivo</a> </td>
+                    <td> 
+
+                        <a href="{{ url_for('upload_docs', idmusico = idmusico|string, doctype = d) }}">
+                        <img src="{{ url_for('static', filename='img/edit.png' )}}" alt="editar archivo">
+                        </a>
+                    </td>
         </tr>
 
     {% endfor %}
