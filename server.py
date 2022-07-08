@@ -6,7 +6,7 @@ import json
 #import datetime
 from datetime import datetime
 import calendar
-from PIL import Image
+from PIL import Image, ImageOps
 import pathlib
 import locale
 locale.setlocale(locale.LC_TIME, 'es_MX')
@@ -59,7 +59,7 @@ docs = ['32d', 'ecuenta', 'factura', 'sitfiscal', 'foto1','foto2','foto3','foto4
 
 app = Flask(__name__)
 app.secret_key = "secret key"
-app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024
+app.config['MAX_CONTENT_LENGTH'] = 64 * 1024 * 1024
 
 path = os.getcwd() # Get current path
 UPLOAD_FOLDER   = os.path.join(path, 'static/files/') # file Upload
@@ -165,6 +165,7 @@ def upload_docs():
                     height  =   float( rwidth/width ) * float(dim[1]) #hacer la proporcion del alto con el ancho deseado
                     newsize =   ( int(rwidth), int(round(height)) ) #obtiene tamaño para resizear
                     imagenr =   image.resize( newsize ) #resizea la imagen y la guarda como imagenr
+                    imagenr =   ImageOps.exif_transpose(imagenr)
                     # guardar foto 
                     filenametosave  = filename.split('.')[0] 
                     #Anteriormente se hacia esto
