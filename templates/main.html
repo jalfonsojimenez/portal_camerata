@@ -14,16 +14,30 @@
                 <th>id</th>
                 <th>nombre</th>
                 <th>puesto</th>
+                {% for d  in docs %}
+                    {% if d.startswith('foto') %}
+                    {% else %}
+                    <th>
+                        {{ d }}
+                    </th>
+                    {% endif %}
+                {% endfor %}
 
-                <th>32 D <br> {{ mes }}</th>
-                <th>Estado <br> de cuenta </th>
-                <th>Factura <br> {{ mes }}</th>
-                <th>Constancia <br> situacion <br>  fiscal</th>
-
-                <th>foto <br>1</th>
-                <th>foto <br>2</th>
-                <th>foto <br>3</th>
-                <th>foto <br>4</th>
+                <!--
+                    <th>id</th>
+                    <th>nombre</th>
+                    <th>puesto</th>
+                    
+                    <th>32 D <br> {{ mes }}</th>
+                    <th>Estado <br> de cuenta </th>
+                    <th>Factura <br> {{ mes }}</th>
+                    <th>Constancia <br> situacion <br>  fiscal</th>
+                    
+                    <th>foto <br>1</th>
+                    <th>foto <br>2</th>
+                    <th>foto <br>3</th>
+                    <th>foto <br>4</th>
+                /!-->
 
                 <th>Reporte  <br> actividades</th>
                 <th>Carta <br> datos bancarios</th>
@@ -36,27 +50,40 @@
             
             {% for d in docs%}
             {% set cadena = k|string + '-' + d + '-' + mes %}
+                {% if d.startswith('foto') %}
 
-                {% if cadena + '.pdf' in archivos[d] %}
-                    <td> <a href="{{ url_for('static', filename= 'files/'+ d + '/' + cadena + '.pdf') }}">
-                        <center>
-                        <img src="{{ url_for('static', filename='img/cleared.png') }}" alt=""></a>
-                        {%if k|string + '-' + d + '-' + mes + '.pdf' in fechas_dict %}
-                            <br> <span  class="fecha"> {{ fechas_dict[cadena+'.pdf'] }} </span>
-                        {% endif %}
-                        </center>
-                    </td>
-                {% elif cadena + '.jpg' in archivos[d] %}
-                    <td  >
-                        <a href="{{ url_for('static', filename= 'files/'+ d + '/' + cadena + '.jpg') }}"> {{  cadena + '.jpg' }} </a>
-                    </td>
                 {% else %}
-                    <td>
-                        <center>
-                             <a class="alert" href="{{ url_for('upload_docs', idmusico = k|string, doctype = d) }}">
-                             <img src="{{ url_for('static', filename='img/upload.png') }}" alt="subir archivo" width="20px"></a>
-                        </center>
-                    </td>
+                    {% if cadena + '.pdf' in archivos[d] %}
+                        <td> <a href="{{ url_for('static', filename= 'files/'+ d + '/' + cadena + '.pdf') }}">
+                            <center>
+                            <img src="{{ url_for('static', filename='img/cleared.png') }}" alt=""></a>
+                            {%if k|string + '-' + d + '-' + mes + '.pdf' in fechas_dict %}
+                                <br> <span  class="fecha"> {{ fechas_dict[cadena+'.pdf'] }} </span>
+                            {% endif %}
+                            </center>
+                        </td>
+                    {% elif cadena + '.xml' in archivos[d] %}
+                        <td> <a href="{{ url_for('static', filename= 'files/'+ d + '/' + cadena + '.xml') }}">
+                            <center>
+                            <img src="{{ url_for('static', filename='img/cleared.png') }}" alt=""></a>
+                            {%if k|string + '-' + d + '-' + mes + '.xml' in fechas_dict %}
+                                <br> <span  class="fecha"> {{ fechas_dict[cadena+'.xml'] }} </span>
+                            {% endif %}
+                            </center>
+                        </td>
+                    {# elif cadena + '.jpg' in archivos[d] %}
+                        <td  >
+                            <a href="{{ url_for('static', filename= 'files/'+ d + '/' + cadena + '.jpg') }}"> {{  cadena + '.jpg' }} </a>
+                        </td>
+                    {# #}
+                    {% else %}
+                        <td>
+                            <center>
+                                 <a class="alert" href="{{ url_for('upload_docs', idmusico = k|string, doctype = d) }}">
+                                 <img src="{{ url_for('static', filename='img/upload.png') }}" alt="subir archivo" width="20px"></a>
+                            </center>
+                        </td>
+                    {% endif %}
                 {% endif %}
 
             {% endfor %}

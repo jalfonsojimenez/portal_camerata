@@ -4,10 +4,12 @@ from werkzeug.utils import secure_filename
 import os
 import json
 #import datetime
-from datetime import datetime
+from datetime import datetime, timedelta
+from dateutil.relativedelta import relativedelta
 import calendar
 from PIL import Image, ImageOps
 import pathlib
+from pathlib import Path
 import locale
 locale.setlocale(locale.LC_TIME, 'es_MX')
 
@@ -19,6 +21,8 @@ mes = datetime.today().strftime('%m')
 meses = ['enero', 'febrero', 'marzo', 'abril', 'mayo', \
             'junio', 'julio', 'agosto', 'septiembre', 'octubre', \
             'noviembre', 'diciembre']
+
+#menos = hoy - relativedelta(months=-1)
 
 mes_actual = meses[int(mes)-1] # mes actual en español, lo checa en la lista -1 elementos, el array empieza en 0
 dias_espanol  = ['domingo','lunes','martes','miércoles','jueves','viernes','sábado']
@@ -50,7 +54,7 @@ musicos = {
     17: { 'nombre': 'Ana Silvia Guerrero González' , 'puesto': 'piano' },
     18: { 'nombre': 'Jorge Eduardo Aceves Cisneros' , 'puesto': 'percusiones' }
 }
-docs = ['32d', 'ecuenta', 'factura', 'sitfiscal', 'foto1','foto2','foto3','foto4']
+docs = ['32d', 'ecuenta', 'factura', 'xmlfactura', 'complementodepago','xmlcomplemento', 'foto1','foto2','foto3','foto4']
 
 
 #############
@@ -79,16 +83,18 @@ def allowed_file(filename):
 ###################
 ###  FUNCIONES  ###
 ###################
+
+
 def lee_archivos(docs):
     pati        = {}
     archivos    = {}
     for doc in docs:
-        #pati.append('./static/files/' + doc)
-        pati[doc] = os.listdir('./static/files/'+doc)
-        try:
-            archivos[doc] = os.listdir( './static/files/' + doc )
-        except:
+#revisa lista de documentos
+        if not os.path.isdir( './static/files/' + doc ):
+#si no está crea el directorio
             os.mkdir( './static/files/' + doc )
+        archivos[doc] = os.listdir( './static/files/' + doc )
+        
     return archivos
 
 def lee_fechas( archivos, docs):
@@ -96,17 +102,31 @@ def lee_fechas( archivos, docs):
     for d in docs:
         path = './static/files/' + d
         for x in os.listdir(path):
+        #para cada archivo extraer cuando fue creado
             time = os.path.getmtime(path + '/' + x)
-            time = datetime.utcfromtimestamp(time).strftime('%A %d-%B-%Y %H:%M')
+            #time = datetime.utcfromtimestamp(time).strftime('%A %d-%B-%Y %H:%M')
+            #se convierte de unixtimestamp y se guarda en la variable time para cada archivo
+            time = datetime.utcfromtimestamp(time)
+            #se le restan 5 horas porque el server está 5 horas adelante
+            time = time - timedelta(hours=5)
+            time = time.strftime('%A %d-%B-%Y %H:%M')
+            #se agrega la fecha al diccionario de fechas_dict, donde viene la fecha en que se suben todos los archivos
             fechas_dict[x] = time
     return fechas_dict
     print( 'FECHAS DICT >> ', fechas_dict )
 
 def abreCal():
-    with open(filename) as test_file:
-        data = json.load(test_file)
+#revisa si hay calendario, de otra forma hace el archivo del mes correspondiente vacío y lo regresa
+    try:
+        with open(filename) as test_file:
+            data = json.load(test_file)
+        return data
+    except:
+        with open(filename, 'w+') as test_file:
+            data = test_file.write( json.dumps( { } ) )
         return data
       
+
 def abre_file_log():
     try:
         with open(filefiles) as fl:
@@ -121,6 +141,7 @@ def abre_file_log():
 
 @app.route('/main')
 def main():
+    mes_actual = datetime.today().strftime('%B') 
     archivos = lee_archivos(docs)
     data_log = abre_file_log()
     fechas_dict = lee_fechas( archivos, docs )
@@ -218,7 +239,7 @@ def login(idmusico):
     if idmusico in musicos: #checa si está en la lista para evitar hackeos
         if request.method == 'POST':
             password = request.form['password']
-            if password == '123':
+            if password == 'Camerata2017!':
                 filenamedba = os.path.join(app.static_folder, 'cartas_musicos', 'cartas_musicos.json')
                 with open(filenamedba) as f:
                     datos = json.load(f)

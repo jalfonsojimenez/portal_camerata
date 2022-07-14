@@ -23,6 +23,13 @@
                         {% if idmusico|string + '-' + d + '-' + mes + '.pdf' in fechas_dict %} <br> <span  class="fecha">subido el: {{ fechas_dict[cadena+'.pdf'] }} </span>{% endif %}
                        </center>
                     </td>
+            {% elif cadena + '.xml' in archivos[d] %}
+                    <td><center>
+                        <a href="{{ url_for('static', filename= 'files/'+ d + '/' + cadena + '.xml') }}">
+                        <img src="{{ url_for('static', filename='img/cleared.png') }}" alt=""></a> 
+                        {% if idmusico|string + '-' + d + '-' + mes + '.xml' in fechas_dict %} <br> <span  class="fecha">subido el: {{ fechas_dict[cadena+'.xml'] }} </span>{% endif %}
+                       </center>
+                    </td>
             {% elif cadena + '.jpg' in archivos[d] %}
                     <td> <a href="{{ url_for('static', filename= 'files/'+ d + '/' + cadena + '.jpg') }}"> {{  cadena + '.jpg' }} </a> </td>
             {% else %}
