@@ -1,6 +1,13 @@
 {% extends 'base.html' %}
 {% block contenido %}
 <form action="" method="POST">
+
+{% for message in get_flashed_messages() %}
+<div class="title">
+    <span class="error">{{  message }}</span>
+</div>
+{% endfor %}
+
 <div>
     <h1>{{ musicos[idmusico]['nombre'] }}</h1>
     <h2>Login para acceder a carta de datos bancarios</h2>
@@ -9,11 +16,17 @@
         <tr>
             <td>palabra clave</td>
             <td><input type="password" name="password"></td>
+            <input type="hidden" name="mes_selected" values="{{ mes_actual }}">
         </tr>
         <tr>
             <td colspan="2"><center><button>Enviar</button></center></td>
         </tr>
     </table>
+</div>
+<div class="title">
+    <br>
+    <br>
+    <a href="{{ url_for('main', mes_selected = mes_actual) }}">Regresar</a>  
 </div>
 </form>
 

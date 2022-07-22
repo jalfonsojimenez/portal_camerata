@@ -6,7 +6,7 @@
             <h1 > Orquesta de Cámara de Zapopan </h1>
                  <b>{{ mes }} de {{ anio }}</b> <br> <br>
                  <a href="{{ url_for('index') }}">inicio </a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                 <a href="{{ url_for('logincal' ) }}">crear o  modificar calendario</a>
+                 <a href="{{ url_for('logincal', mes_selected = mes ) }}">crear o  modificar calendario</a>
          </center>
     </div>
     <div class="title">
@@ -45,7 +45,7 @@
         {% for k,v in musicos.items() %}
         <tr id = {{ k|string  }}>
             <td  >{{ k  }}</td>
-            <td  ><a href="{{ url_for('user', idmusico = k) }}">{{ v['nombre'] }}</a></td>
+            <td  ><a href="{{ url_for('user', idmusico = k, mes_selected= mes) }}">{{ v['nombre'] }}</a></td>
             <td  >{{ v['puesto']}}</td>
             
             {% for d in docs%}
@@ -79,7 +79,7 @@
                     {% else %}
                         <td>
                             <center>
-                                 <a class="alert" href="{{ url_for('upload_docs', idmusico = k|string, doctype = d) }}">
+                                 <a class="alert" href="{{ url_for('upload_docs', idmusico = k|string, doctype = d, mes_selected=mes ) }}">
                                  <img src="{{ url_for('static', filename='img/upload.png') }}" alt="subir archivo" width="20px"></a>
                             </center>
                         </td>
@@ -88,9 +88,9 @@
 
             {% endfor %}
             {# Columna con reportes #}
-                    <td  ><a href="{{ url_for('muestra_calendario' , idmusico=k) }}">reporte</a></td>
+                    <td  ><a href="{{ url_for('muestra_calendario' , idmusico=k, mes_selected=mes) }}">reporte</a></td>
             {# Columna con carta de datos bancarios #}
-                    <td  ><a href="{{ url_for('login' , idmusico=k) }}">cartas <br> bancarias </a></td>
+                    <td  ><a href="{{ url_for('login' , idmusico=k, mes_selected=mes ) }}">cartas <br> bancarias </a></td>
             </tr>
 
         {% endfor %}

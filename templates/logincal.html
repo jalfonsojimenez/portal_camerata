@@ -1,6 +1,12 @@
 {% extends 'base.html' %}
 {% block contenido %}
 <form action="" method="POST">
+{% for message in get_flashed_messages() %}
+<div class="title">
+    <span class="error">{{ message }}</span>
+</div>
+
+{% endfor %}
 <div>
     <h2>Login para acceder a modificar o crear el calendario</h2>
     <table>
@@ -8,6 +14,7 @@
         <tr>
             <td>palabra clave</td>
             <td><input type="password" name="password"></td>
+            <input type="hidden" name="mes_selected" value="{{ mes_actual }}">
         </tr>
         <tr>
             <td colspan="2"><center><button>Enviar</button></center></td>
@@ -15,5 +22,11 @@
     </table>
 </div>
 </form>
+<div class="title">
+<br>
+<br>
+    <a href="{{ url_for('main', mes_selected = mes_actual ) }}">Regresar</a>
+
+</div>
 
 {% endblock %}

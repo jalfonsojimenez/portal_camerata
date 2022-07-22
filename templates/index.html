@@ -35,15 +35,36 @@
             <h2>Sistema de alta de  documentos</h2>
                 <img src="{{ url_for('static',filename='img/logo_camerata.jpg' )}}" width="300">
             <form action="/usuario" method="POST">                
+            <label for="integrante">Integrante</label>
             <select  name="idmusico">
                     {% for k,v in musicos.items() %}
                     <option value="{{ k|string }}">{{ v['nombre'] }}</option>
                     {% endfor %}
-                </select>
-                <button> Ir</button>
-                <br><br>
+            </select>
+            <br>
+            <br>
+            
+            {% for x in mes_select %}
+                <input type="radio" name="mes_selected" value="{{ x }}">
+                <label for="{{ x }}">{{ x }}</label>
+            {% endfor %}
+            <br>
+            <br>
+            
+           
+                <button>Entrar </button>
+
                
-                <a href="{{ url_for('main') }}"> Ver tabla con  todos los usuarios</a>
+                <!-- <a href="{{ url_for('main') }}"> Ver tabla con  todos los usuarios</a> --!>
+                <p>Ver todos los documentos</p>
+                <table>
+                    <tr>
+                    {% for m in mes_select %}
+
+                    <td style="padding:1em"><a href="{{ url_for('main', mes_selected = m )  }}">{{ m  }}</a></td>
+                    {% endfor %}
+                    </tr>
+                </table>
             </form>
 
 

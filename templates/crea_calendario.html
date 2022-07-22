@@ -29,6 +29,13 @@
 
     
 
+        <input type="hidden" name="mes_selected" value="{{ mes_actual }}">
         <input type="submit" value="hacer calendario">
     </form>
+    <br><br>
+
+    <div class="title">
+    <br> <br>
+        <a href="{{ url_for('main', mes_selected= mes_actual ) }}"> volver a inicio</a>
+    </div>
 {% endblock %}

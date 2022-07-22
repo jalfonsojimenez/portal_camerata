@@ -1,17 +1,21 @@
 from flask import Flask, flash, render_template, request, redirect, url_for
 from werkzeug.utils import secure_filename
 # from os.path import exists
+
 import os
 import json
-#import datetime
+
 from datetime import datetime, timedelta
 from dateutil.relativedelta import relativedelta
 import calendar
-from PIL import Image, ImageOps
-import pathlib
-from pathlib import Path
+from calendar import monthrange
 import locale
 locale.setlocale(locale.LC_TIME, 'es_MX')
+
+from PIL import Image, ImageOps
+
+import pathlib
+from pathlib import Path
 
 #######################
 # variables de tiempo #
@@ -24,7 +28,7 @@ meses = ['enero', 'febrero', 'marzo', 'abril', 'mayo', \
 
 #menos = hoy - relativedelta(months=-1)
 
-mes_actual = meses[int(mes)-1] # mes actual en español, lo checa en la lista -1 elementos, el array empieza en 0
+#mes_actual = meses[int(mes)-1] # mes actual en español, lo checa en la lista -1 elementos, el array empieza en 0
 dias_espanol  = ['domingo','lunes','martes','miércoles','jueves','viernes','sábado']
 today = datetime.now()
 dia = today.strftime('%A %d-%m-%Y-%H:%M')
@@ -67,8 +71,8 @@ app.config['MAX_CONTENT_LENGTH'] = 64 * 1024 * 1024
 
 path = os.getcwd() # Get current path
 UPLOAD_FOLDER   = os.path.join(path, 'static/files/') # file Upload
-filename        = os.path.join(app.static_folder, 'calendarios', 'calendario' + mes_actual + '.json')
-filefiles       = os.path.join(app.static_folder, 'files', 'registro_uploads' + mes_actual + '.json')
+#filename        = os.path.join(app.static_folder, 'calendarios', 'calendario' + mes_actual + '.json')
+#filefiles       = os.path.join(app.static_folder, 'files', 'registro_uploads' + mes_actual + '.json')
 
 # Make directory if uploads is not exists
 if not os.path.isdir(UPLOAD_FOLDER):
@@ -86,6 +90,10 @@ def allowed_file(filename):
 
 
 def lee_archivos(docs):
+    """
+    lee los archivos existentes y regresa una lista con los nombres
+    de los mismos
+    """
     pati        = {}
     archivos    = {}
     for doc in docs:
@@ -98,6 +106,10 @@ def lee_archivos(docs):
     return archivos
 
 def lee_fechas( archivos, docs):
+    """
+    lee las fechas en las que fueron subidas los archivos y regresa un dictionary
+    con el nombre de archivo y la fecha en la que fue subida a la plataforma
+    """
     fechas_dict = {} #diccionario donde se agregan los archivos con la fecha en la que se agrega el archivo
     for d in docs:
         path = './static/files/' + d
@@ -113,10 +125,12 @@ def lee_fechas( archivos, docs):
             #se agrega la fecha al diccionario de fechas_dict, donde viene la fecha en que se suben todos los archivos
             fechas_dict[x] = time
     return fechas_dict
-    print( 'FECHAS DICT >> ', fechas_dict )
 
-def abreCal():
-#revisa si hay calendario, de otra forma hace el archivo del mes correspondiente vacío y lo regresa
+def abreCal(mes_actual):
+    """
+    revisa si hay calendario, de otra forma hace el archivo del mes correspondiente vacío y lo regresa
+    """
+    filename = os.path.join(app.static_folder, 'calendarios', 'calendario' + mes_actual + '.json')
     try:
         with open(filename) as test_file:
             data = json.load(test_file)
@@ -125,8 +139,8 @@ def abreCal():
         with open(filename, 'w+') as test_file:
             data = test_file.write( json.dumps( { } ) )
         return data
-      
 
+"""
 def abre_file_log():
     try:
         with open(filefiles) as fl:
@@ -134,6 +148,37 @@ def abre_file_log():
             return data_log
     except:
         open( filefiles, 'a+' ).close()
+"""
+
+###################################
+#### Funciones para calendario ####
+###################################
+
+def get_meses():
+#regresa un array con el mes en curso en letras y dos meses anteriores
+    meses_array = []
+    for x in range(0,3):
+       mesesito = datetime.today() - relativedelta(months=x)
+       mesesito = mesesito.strftime('%B')
+       meses_array.append( mesesito )
+    return meses_array
+
+
+def get_fechas( anio, mes ):
+    """
+    con el año y el mes elegido regresa un array con lo siguiente:
+    fechas [ primer dia de la semana del mes seleccionado en número, total de dias del mes del mes seleccionado]
+    """
+    fechas = [] 
+    mes = meses.index( mes )
+#al calcular el primer dia del mes se le suma 1 porque el array de meses comienza en cero
+    primerdiames = datetime( int( anio ) , int( mes + 1 ), 1) 
+    primerdiamessemana = primerdiames.strftime( '%w' )
+    fechas.append( int(primerdiamessemana) )
+
+    dias_mes=  monthrange(int(anio),int(mes+1))[1]
+    fechas.append( int(dias_mes) )
+    return fechas
 
 ###################
 ###   RUTAS     ###
@@ -141,19 +186,23 @@ def abre_file_log():
 
 @app.route('/main')
 def main():
-    mes_actual = datetime.today().strftime('%B') 
+    mes_actual = request.args.get('mes_selected')
+    #mes_actual = datetime.today().strftime('%B') 
+
+    #funcion para leer archivos de carpetas
     archivos = lee_archivos(docs)
-    data_log = abre_file_log()
+    #data_log = abre_file_log()
     fechas_dict = lee_fechas( archivos, docs )
-    print( data_log )
     return render_template('main.html', musicos = musicos , mes = mes_actual, anio = anio, \
-                            docs = docs, archivos = archivos, data_log = data_log, fechas_dict = fechas_dict)
-    
+                            docs = docs, archivos = archivos,  fechas_dict = fechas_dict )
+    #data_log = data_log,
     
 
 @app.route('/')
 def index():
-    return render_template('index.html', musicos = musicos)
+#get lista de meses para elegir
+    mes_select = get_meses()
+    return render_template('index.html', musicos = musicos,   mes_select = mes_select)
 
 
 
@@ -161,8 +210,10 @@ def index():
 def upload_docs():
     idmusico    = request.args.get( 'idmusico' ) 
     doctype     = request.args.get( 'doctype' )
+    mes_actual = request.args.get('mes_selected')
     dict_file   = {}
     if request.method == 'POST':
+        mes_actual = request.form['mes_selected']
         if 'files[]' not in request.files:
             flash( 'No hay archivos para subir' )
             return redirect(request.url)
@@ -199,17 +250,34 @@ def upload_docs():
                     with open('static/files/'  + 'registro_uploads'  + mes_actual + '.json','a') as dp:
                         json.dump( dict_file, dp, indent=4 ) #escribe el json con las fechas enviadas
         flash( 'Archivos subidos con éxito ')
-        return redirect( url_for( 'user', idmusico = idmusico ) )
+        return redirect( url_for( 'user', idmusico = idmusico, mes_selected= mes_actual ) )
     return render_template('upload_docs.html', musicos = musicos, idmusico = idmusico, mes = mes_actual, doctype = doctype, dia = dia)
 
+#######################################
+#### RUTAS DE REPORTE Y CALENDARIO ####
+#######################################
 
 @app.route('/crea_calendario', methods=['GET','POST'])
 def crea_calendario():
-    data = abreCal()
+#    mes_actual = request.form.get('mes_selected')
+#    data = abreCal(mes_actual)
+
+    
     fechasCalendario = {}
     multi_dict = request.form
+
     if request.method == 'POST':
+        mes_actual = request.form['mes_selected']
+        data = abreCal( mes_actual )
+        anio = today.strftime( '%Y' )
+        fechas = get_fechas( anio, mes_actual)
+        primerdiamessemana = fechas[0] 
+        diasmes = fechas[1]
+        archivos = lee_archivos(docs)
+        fechas_dict = lee_fechas( archivos, docs )
+
         for k in request.form:
+            print(k)
             if multi_dict.get(k) != '':
                 fechasCalendario[k] = multi_dict.get(k)
             else :
@@ -217,27 +285,59 @@ def crea_calendario():
         calendario = 'calendario' + mes_actual #Pone nombre de calendario y mes actual para guardar como archivo json
         with open('static/calendarios/'+calendario+'.json','w') as fp:
             json.dump( fechasCalendario, fp, indent=4 ) #escribe el json con las fechas enviadas
-        return redirect( '/main'  )
-    return render_template('crea_calendario.html', diasmes=diasmes , dias_espanol = dias_espanol, \
+        
+        return render_template('main.html', musicos = musicos , mes = mes_actual, anio = anio, \
+                                docs = docs, archivos = archivos,  fechas_dict = fechas_dict )
+
+    return render_template('crea_calendario.html', diasmes=diasmes , dias_espanol = dias_espanol,\
                             primerdiamessemana=primerdiamessemana, mes_actual=mes_actual, anio=anio, data = data)
+
+
+
+@app.route('/logincal', methods=['POST','GET'])
+def logincal():
+    mes_actual = request.args.get('mes_selected')
+    data = abreCal(mes_actual)
+    print( data )
+
+    fechas = get_fechas( anio, mes_actual)
+    primerdiamessemana = fechas[0] 
+    diasmes = fechas[1]
+
+    if request.method == 'POST':
+        password = request.form['password']
+        mes_actual = request.form['mes_selected']
+        if password == 'camerata':
+            return render_template('crea_calendario.html', diasmes=diasmes , dias_espanol = dias_espanol, \
+                            primerdiamessemana=primerdiamessemana, mes_actual=mes_actual, anio=anio, data = data)
+        else:
+            flash( 'Password incorrecto, vuelve a intentar')
+            return redirect( url_for('logincal', **request.args ))
+    return render_template('logincal.html', mes_actual = mes_actual)
 
 
 @app.route('/muestra_calendario/<idmusico>', methods=['GET'])
 def muestra_calendario(idmusico):
+    mes_actual = request.args.get('mes_selected')
     idmusico    = int( idmusico )
-    data = abreCal()
+    data = abreCal(mes_actual)
+
+    fechas = get_fechas( anio, mes_actual)
+    primerdiamessemana = fechas[0] 
+    diasmes = fechas[1]
+
     return render_template('muestra_calendario.html', idmusico=idmusico, data = data, diasmes=diasmes , dias_espanol = dias_espanol, \
                             primerdiamessemana=primerdiamessemana, mes_actual=mes_actual, anio=anio, musicos = musicos)
 
 
 @app.route('/login/<idmusico>', methods=['GET', 'POST'])
 def login(idmusico):
+    mes_actual = request.args.get('mes_selected')
     idmusico = int( idmusico )
-    #with open(filename) as test_file:
-        #data = json.load(test_file)
-    data = abreCal
+    data = abreCal(mes_actual)
     if idmusico in musicos: #checa si está en la lista para evitar hackeos
         if request.method == 'POST':
+            mes_actual = request.form['mes_selected']
             password = request.form['password']
             if password == 'Camerata2017!':
                 filenamedba = os.path.join(app.static_folder, 'cartas_musicos', 'cartas_musicos.json')
@@ -245,28 +345,20 @@ def login(idmusico):
                     datos = json.load(f)
                 return render_template('muestra_dba.html', idmusico = idmusico, musicos = musicos, \
                                         datos = datos, filenamedba = filenamedba, diasmes=diasmes, mes_actual=mes_actual, anio = anio)
+            else: 
+                flash( 'Password incorrecto, vuelve a intentar')
+                return redirect( url_for('login', idmusico = idmusico, **request.args ))
     else:
-        return redirect('/')
+        return redirect( '/')
     return render_template( 'login.html', idmusico = idmusico, musicos = musicos, mes_actual = mes_actual)
 
-
-@app.route('/logincal', methods=['POST','GET'])
-def logincal():
-    #with open(filename) as test_file:
-        #data = json.load(test_file)
-    data = abreCal()
-    if request.method == 'POST':
-        password = request.form['password']
-        if password == 'camerata':
-            return render_template('crea_calendario.html', diasmes=diasmes , dias_espanol = dias_espanol, \
-                            primerdiamessemana=primerdiamessemana, mes_actual=mes_actual, anio=anio, data = data)
-        else:
-            return redirect('/')
-    return render_template('logincal.html')
 
 
 @app.route('/muestra_dba/', methods=['POST']) #Ruta para mostrar datos bancarios
 def muestra_dba(idmusico):
+    mes_actual = request.args.get('mes_selected')
+    if request.method == 'POST':
+        mes_actual = request.form['mes_selected']
     return render_template('muestra_calendario.html', idmusico=idmusico, datos = datos, diasmes=diasmes , dias_espanol = dias_espanol, \
                             primerdiamessemana=primerdiamessemana, mes_actual=mes_actual, anio=anio, musicos = musicos)
 
@@ -274,14 +366,18 @@ def muestra_dba(idmusico):
 @app.route('/usuario', methods=['GET', 'POST'])
 def user():
     archivos = lee_archivos( docs )
-    data_log = abre_file_log()
+    #data_log = abre_file_log()
     fechas_dict = lee_fechas( archivos, docs )
+    mes_actual = request.args.get('mes_selected')
     if request.method == 'POST':
+        mes_actual = request.form['mes_selected']
         idmusico = int( request.form['idmusico'] ) 
-        return render_template('usuario.html', idmusico = idmusico, musicos = musicos, docs = docs, mes = mes_actual,  archivos = archivos, data_log = data_log, fechas_dict = fechas_dict)
+        return render_template('usuario.html', idmusico = idmusico, musicos = musicos, docs = docs, mes = mes_actual,  archivos = archivos, fechas_dict = fechas_dict)
+#data_log = data_log,
     else:
         idmusico = int(request.args.get('idmusico'))
-        return render_template('usuario.html', idmusico = idmusico, musicos = musicos, docs = docs, mes = mes_actual,  archivos = archivos, data_log = data_log, fechas_dict = fechas_dict)
+        return render_template('usuario.html', idmusico = idmusico, musicos = musicos, docs = docs, mes = mes_actual,  archivos = archivos \
+        , fechas_dict = fechas_dict) #data_log = data_log
 
 if __name__ == '__main__':
     app.run(host='127.0.0.1', port=8000, debug=True)
