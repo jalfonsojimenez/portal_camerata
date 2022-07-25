@@ -58,7 +58,7 @@ musicos = {
     17: { 'nombre': 'Ana Silvia Guerrero González' , 'puesto': 'piano' },
     18: { 'nombre': 'Jorge Eduardo Aceves Cisneros' , 'puesto': 'percusiones' }
 }
-docs = ['32d', 'ecuenta', 'factura', 'xmlfactura', 'complementodepago','xmlcomplemento', 'foto1','foto2','foto3','foto4']
+docs = ['32d', 'ecuenta','sitfiscal', 'factura', 'xmlfactura', 'complementodepago','xmlcomplemento', 'foto1','foto2','foto3','foto4']
 
 
 #############
@@ -204,6 +204,10 @@ def index():
     mes_select = get_meses()
     return render_template('index.html', musicos = musicos,   mes_select = mes_select)
 
+@app.route('/instrucciones')
+def instrucciones():
+    mes_actual = request.args.get('mes_selected')
+    return render_template('instrucciones.html', mes_actual = mes_actual)
 
 
 @app.route('/upload_docs', methods=['GET', 'POST'])

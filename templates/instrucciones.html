@@ -1,0 +1,34 @@
+{% extends 'base.html' %}
+{% block contenido%}
+<div>
+    <h1>Instrucciones para el uso del sistema </h1>
+    <br>
+    <br>
+    
+    <p> El sistema de alta de documentos sirve para organizar y hacer más eficiente la entrega de documentos necesarios para los pagos mensuales. 
+    <br> 
+    <b>
+        Los documentos a entregar son los siguientes:
+    </b>
+    </p>
+    <ul>
+        <li>32D u Opinión del cumplimiento de obligaciones fiscales(32D)</li>
+        <li>Estado de cuenta (ecuenta)</li>
+        <li>Factura</li>
+        <li>Xml de la factura (xmlfactura)</li>
+        <li>Complemento de pago</li>
+        <li>Xml del complemento de pago</li>
+        <li>Reporte de actividades</li>
+        <li>Carta de datos bancarios</li>
+    </ul>
+    <p>Se deben subir todos los documentos en el mes correspondiente, por ejemplo: en junio deben estar las facturas de junio, incluyendo también los complementos de pago del mes correspondiente, aunque estos se reciban posteriormente.</p>
+    <h2>Importante</h2>
+    <p>El sistema no cuenta con un apartado para borrar documentos, si es necesario borrar algún documento, simplemente se reemplaza por otro, borrando en automático el documento en cuestión.</p>
+    <br>
+    <br>
+    
+    
+    <a href="{{ url_for('main', mes_selected = mes_actual) }}">inicio</a>
+    
+</div>
+{% endblock %}
