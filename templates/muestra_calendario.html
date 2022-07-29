@@ -47,13 +47,13 @@
                     {{ i + 1|int - primerdiamessemana | int }}
                     {{ dias_espanol[i] }} <br> <br>    
                     {% if data[(i+1-primerdiamessemana|int) | string ]   == 'x' %}
-                        <p>Ensayo en ccc</p>
+                        <p class="calendario">Ensayo en ccc</p>
                     {% elif data[(i +1-primerdiamessemana|int)| string] == 'y' %}
-                        <p>Concierto de temporada</p>
+                        <p class="calendario">Concierto de temporada</p>
                     {% elif data[(i+1-primerdiamessemana|int)| string] == 'z' %}
-                        <p>Estudio personal</p>
+                        <p class="calendario">Estudio personal</p>
                     {% else %}
-                        <p> {{ data[(i+1-primerdiamessemana|int) | string]}}</p>
+                        <p class="calendario"> {{ data[(i+1-primerdiamessemana|int) | string]}}</p>
                     {% endif %} 
                 </div>
             {% endif %}
