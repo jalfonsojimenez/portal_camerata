@@ -7,6 +7,7 @@
                  <b>{{ mes }} de {{ anio }}</b> <br> <br>
                  <a href="{{ url_for('index') }}">inicio </a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                  <a href="{{ url_for('logincal', mes_selected = mes ) }}">crear o  modificar calendario</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                 <a href="{{ url_for('static', filename='files/carta_manifiesto.pdf') }}">carta manifiesto</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                  <a href="{{ url_for('instrucciones', mes_selected = mes) }}">Instrucciones</a>
          </center>
     </div>

@@ -344,6 +344,7 @@ def login(idmusico):
             mes_actual = request.form['mes_selected']
             password = request.form['password']
             if password == 'Camerata2017!':
+                mes_actual = request.form['mes_selected']
                 filenamedba = os.path.join(app.static_folder, 'cartas_musicos', 'cartas_musicos.json')
                 with open(filenamedba) as f:
                     datos = json.load(f)
